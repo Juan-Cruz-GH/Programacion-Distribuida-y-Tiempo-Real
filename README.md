@@ -8,8 +8,19 @@
 
 ## Cómo se aprueba la cursada?
 
-...
+-   Hay 4 prácticas, **cada una** tiene una entrega y una re-entrega si te va mal.
+-   Las prácticas 1 3 y 4 son los jueves.
+-   La práctica 2 son los lunes.
+-   Cada entrega debe tener:
+
+    1. Un documento o informe con carátula y explicando qué hice y por qué.
+    2. El código fuente.
+
+-   La cursada se aprueba aprobando las 4 entregas.
 
 ## Cómo se aprueba la promoción?
 
-...
+2 opciones:
+
+1. Final tradicional.
+2. Hacer un TP a convenir.
