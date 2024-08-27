@@ -6,6 +6,7 @@
 -   [Google Drive de la cátedra](https://drive.google.com/drive/folders/13A_bJ7KJGUmDgGuQ5Lm7mHBpqI6YuugR?usp=sharing)
 -   [Playlist con todas las teorías](https://www.youtube.com/playlist?list=PLDJU8kNAPOn8GJvFmLAcB7rPp2kkv5XE1)
 -   [Docker de la cátedra](https://hub.docker.com/r/gmaron/pdytr)
+-   [Prácticas resueltas](https://docs.google.com/document/u/1/)
 
 ## Cómo se aprueba la cursada?
 
