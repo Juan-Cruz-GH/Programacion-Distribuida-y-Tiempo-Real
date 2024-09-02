@@ -65,9 +65,53 @@ Los sistemas distribuidos tienen varias características principales:
 
 ---
 
-<h1 align="center">Clase 2 - ? de ?, 2024</h1>
+<h1 align="center">Clase 2 - 2 de septiembre, 2024</h1>
 
-##
+## Procesamiento Cliente Servidor
+
+### Introducción
+
+-   Abreviaremos Cliente Servidor con C/S.
+-   La idea del modelo de procesamiento Cliente Servidor nace de la realidad de tener procesos que necesitan recursos que no tienen, y otros procesos que sí tienen estos recursos y se los pueden compartir. Por ejemplo: las aplicaciones de usuario como cliente, y el sistema operativo como servidor.
+-   Existen muchas variantes del modelo C/S debido a la amplia gama de necesidades y aplicaciones que existe en los sistemas.
+
+### Esquema temporal de procesamiento para el cliente
+
+![Esquema temporal de procesamiento para el cliente](https://i.imgur.com/AF1ofwT.png)
+
+1. El cliente ejecuta sus sentencias propias hasta que en algún momento necesita algo que no tiene.
+2. En ese momento, realiza un requerimiento al servidor.
+3. Hasta que el servidor no le responda, el cliente no puede seguir.
+4. El servidor le responde con el resultado y ahora el cliente puede seguir su ejecución.
+
+### Esquema temporal de procesamiento para el servidor
+
+![Esquema temporal de procesamiento para el servidor](https://i.imgur.com/ZPvc6UR.png)
+
+1. El servidor "no hace nada" hasta que recibe un requerimiento.
+2. Al recibirlo, lo resuelve.
+3. Al terminar de resolverlo, le envía el resultado al cliente.
+4. Luego de enviar el resultado al cliente, vuelve al estado de "no hacer nada" donde puede aceptar nuevos requerimientos.
+
+### Overhead de comunicaciones (envío y recepción)
+
+![Overhead de comunicaciones (envío y recepción)](https://i.imgur.com/nUSAfgC.png)
+
+-   El requerimiento del cliente al servidor y la respuesta del servidor al cliente no son instantáneos, llevan un tiempo (overhead) ya que se deben transmitir estos mensajes por la red.
+
+### Características
+
+1. El modelo posee 2 tipos de procesos que interactúan, clientes y servidores. Puede haber una cantidad indeterminada de ambos.
+2. Los clientes son **activos**, ya que son ellos los que inician los requerimientos.
+3. Los servidores son **pasivos**, ya que no saben cuándo llegará una petición nueva.
+4. Los clientes son los que usan o necesitan recursos que le piden al servidor.
+5. Los servidores poseen y/o administran los recursos, pero no los usan.
+6. Los clientes no saben nada del servidor más allá de cómo pedirles algo (abstracción).
+7. Los servidores conocen el estado de todos los recursos.
+8. Ni los clientes ni los servidores se ocupan de la transferencia de información entre ellos (overhead de comunicación).
+9. Los clientes y los servidores tienen una interfaz bien definida:
+    1. Cómo pedir un servicio y qué datos necesita el servidor que le envíen.
+    2. Cómo se retorna la respuesta al cliente.
 
 ---
 
