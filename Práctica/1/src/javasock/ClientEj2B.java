@@ -44,9 +44,16 @@ public class ClientEj2B {
             toServer.write(buffer, 0, buffer.length);
             toServer.flush();
 
-            // Recibir respuesta del servidor
-            byte[] responseBuffer = new byte[size];
-            fromServer.read(responseBuffer);
+             // Recibir respuesta del servidor
+             byte[] responseBuffer = new byte[size];
+             int totalBytesRead = 0;
+             int bytesRead;
+             
+             while (totalBytesRead < size) {
+                 bytesRead = fromServer.read(responseBuffer, totalBytesRead, size - totalBytesRead);
+                 if (bytesRead == -1) break;
+                 totalBytesRead += bytesRead;
+             }
 
         }
 
