@@ -1,5 +1,6 @@
     import java.io.*;
     import java.net.*;
+    import java.util.zip.CRC32;
 
     public class ServerEj2B {
         public static void main(String[] args) throws IOException {
@@ -37,7 +38,7 @@
             for (int expectedSize : expectedBufferSizes) {
                 // Crear un buffer grande para recibir el mensaje
                 byte[] buffer = new byte[expectedSize];
-            
+
                 int totalBytesRead = 0;
                 int bytesRead;
                 // Leer los datos del cliente hasta completar el tamaño esperado
@@ -45,6 +46,21 @@
                     bytesRead = fromClient.read(buffer, totalBytesRead, expectedSize - totalBytesRead);
                     if (bytesRead == -1) break;
                     totalBytesRead += bytesRead;
+                }
+
+                // Leer el checksum enviado por el cliente
+                long receivedChecksum = fromClient.readLong();
+
+                // Calcular el checksum de los datos recibidos
+                CRC32 crc = new CRC32();
+                crc.update(buffer, 0, totalBytesRead);
+                long computedChecksum = crc.getValue();
+
+                // Verificar si el checksum es correcto
+                if (computedChecksum == receivedChecksum) {
+                    System.out.println("Checksum correcto para el buffer de tamaño: " + expectedSize);
+                } else {
+                    System.out.println("Error de checksum para el buffer de tamaño: " + expectedSize);
                 }
 
                 // Mostrar cuántos bytes fueron leídos en total para el buffer actual

@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.zip.CRC32;
 
 public class ClientEj2B {
     public static void main(String[] args) throws IOException {
@@ -38,10 +39,24 @@ public class ClientEj2B {
 
             // Crear buffer del tamaño actual
             byte[] buffer = new byte[size];
+            
             // Llenar el buffer con datos simulados
+            for (int i = 0; i < size; i++) {
+                buffer[i] = (byte) i;
+            }
+
+            // Calcular el checksum del buffer
+            CRC32 crc = new CRC32();
+            crc.update(buffer, 0, buffer.length);
+            long checksum = crc.getValue();
+  
         
             // Enviar datos al servidor
             toServer.write(buffer, 0, buffer.length);
+            toServer.flush();
+
+            // Enviar el checksum al servidor
+            toServer.writeLong(checksum);
             toServer.flush();
 
              // Recibir respuesta del servidor
