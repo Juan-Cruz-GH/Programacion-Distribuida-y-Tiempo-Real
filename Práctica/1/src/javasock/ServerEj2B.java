@@ -42,7 +42,7 @@
                 
                 int bytesRead = fromClient.read(buffer, totalBytesRead, expectedSize - totalBytesRead);
                 // Leer los datos del cliente hasta completar el tamaño esperado
-                while (bytesRead != -1) {
+                while (totalBytesRead < expectedSize) {
                     totalBytesRead += bytesRead;
                     bytesRead = fromClient.read(buffer, totalBytesRead, expectedSize - totalBytesRead);
                 }
