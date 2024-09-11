@@ -75,7 +75,9 @@ public class ClientEj3 {
             
                 total += (finishTime - startTime);
             }
-            System.out.println("Tamaño en bytes: " + size + " - Tiempo promedio de ejecución: " + total/10 + " ns");
+            double milisegundos = total / 1_000_000.0;
+            String tiempoFormatteado = String.format("%.7f", milisegundos / 10);
+            System.out.println("Tamaño en bytes: " + size + " - Tiempo promedio de ejecución: " + tiempoFormatteado + " milisegundos");
 
         }
 
