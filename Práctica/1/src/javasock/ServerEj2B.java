@@ -58,9 +58,10 @@
 
                 // Verificar si el checksum es correcto
                 if (computedChecksum == receivedChecksum) {
-                    System.out.println("Checksum correcto para el buffer de tamaño: " + expectedSize);
+                    System.out.println("Checksum recibido: " + receivedChecksum);
+                    System.out.println("Checksum computado: " + computedChecksum);
                 } else {
-                    System.out.println("Error de checksum para el buffer de tamaño: " + expectedSize);
+                    System.out.println("Error de checksum.");
                 }
 
                 // Mostrar cuántos bytes fueron leídos en total para el buffer actual

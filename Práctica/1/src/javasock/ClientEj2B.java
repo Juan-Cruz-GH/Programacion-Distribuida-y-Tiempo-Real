@@ -59,6 +59,8 @@ public class ClientEj2B {
             toServer.writeLong(checksum);
             toServer.flush();
 
+            System.out.println("Enviando checksum: " + checksum);
+
              // Recibir respuesta del servidor
              byte[] responseBuffer = new byte[size];
              int totalBytesRead = 0;
