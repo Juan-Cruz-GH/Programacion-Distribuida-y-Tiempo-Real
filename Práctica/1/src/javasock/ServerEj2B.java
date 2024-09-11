@@ -39,12 +39,12 @@
                 byte[] buffer = new byte[expectedSize];
             
                 int totalBytesRead = 0;
-                
-                int bytesRead = fromClient.read(buffer, totalBytesRead, expectedSize - totalBytesRead);
+                int bytesRead;
                 // Leer los datos del cliente hasta completar el tamaño esperado
                 while (totalBytesRead < expectedSize) {
-                    totalBytesRead += bytesRead;
                     bytesRead = fromClient.read(buffer, totalBytesRead, expectedSize - totalBytesRead);
+                    if (bytesRead == -1) break;
+                    totalBytesRead += bytesRead;
                 }
 
                 // Mostrar cuántos bytes fueron leídos en total para el buffer actual
