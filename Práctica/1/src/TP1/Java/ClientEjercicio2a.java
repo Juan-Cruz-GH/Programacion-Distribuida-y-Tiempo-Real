@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Client_Ej2a {
+public class ClientEjercicio2a {
   public static void main(String[] args) throws IOException {
     // Validar los argumentos
     if ((args.length != 2) || (Integer.valueOf(args[1]) <= 0)) {

@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.zip.CRC32;
 
-public class ClientEj2B {
+public class ClientEjercicio2b {
     public static void main(String[] args) throws IOException {
         // Validar los argumentos
         if ((args.length != 2) || (Integer.valueOf(args[1]) <= 0)) {

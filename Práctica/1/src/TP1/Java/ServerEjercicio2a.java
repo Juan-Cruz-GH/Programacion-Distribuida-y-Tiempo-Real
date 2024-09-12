@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Server_Ej2a {
+public class ServerEjercicio2a {
   public static void main(String[] args) throws IOException {
     // Validar los argumentos
     if ((args.length != 1) || (Integer.valueOf(args[0]) <= 0)) {
