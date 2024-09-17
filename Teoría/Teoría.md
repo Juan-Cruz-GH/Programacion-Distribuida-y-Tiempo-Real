@@ -115,9 +115,43 @@ Los sistemas distribuidos tienen varias características principales:
 
 ---
 
-<h1 align="center">Clase 3 - ? de ?, 2024</h1>
+<h1 align="center">Clase 3 - 17 de septiembre, 2024</h1>
 
-##
+## Sistemas Distribuidos vs. Sistemas Centralizados
+
+### Ventajas de los Sistemas Distribuidos
+
+1. **Costo/rendimiento**: resulta mucho más barato comprar muchas computadoras medianamente o poco potentes que comprar una sola computadora muy potente, y a fin de cuentas la performance es similar si no incluso mejor.
+2. **Distribución inherente del problema**: si el problema o las tareas que se están resolviendo pueden dividirse o distribuirse fácilmente, un sistema distribuido permite que diferentes componentes trabajen de forma independiente y simultánea, lo cual mejora el rendimiento.
+3. **Crecimiento incremental del hardware**: los sistemas distribuidos permiten agregar más hardware de manera gradual a medida que crecen las necesidades. Esto se puede hacer sin afectar la estructura general del sistema, algo que no es tan sencillo en los sistemas centralizados, donde el hardware es más rígido.
+4. **Recursos compartidos**: en los sistemas distribuidos, varios usuarios o aplicaciones pueden acceder y compartir los mismos recursos a través de la red, lo cual aumenta la eficiencia. En un sistema centralizado, los recursos suelen estar más aislados y no es tan sencillo compartirlos entre sistemas independientes.
+
+### Desventajas de los Sistemas Distribuidos
+
+1. **Software**: los sistemas distribuidos requieren un software más complejo para coordinar los diferentes componentes y garantizar que todos funcionen juntos de manera eficiente y sin inconvenientes. Esto presenta un problema porque el software en general e históricamente siempre fue pensado primero y principalmente para sistemas centralizados.
+2. **Seguridad**: la seguridad puede ser más difícil de gestionar en sistemas distribuidos porque hay más puntos de entrada o vulnerabilidades posibles debido a la gran cantidad de componentes y la dispersión de éstos. Un sistema centralizado tiene menos puntos de acceso, ergo puede ser más fácil de proteger.
+3. **Características de las redes actuales**: los sistemas distribuidos dependen profundamente de la red que los conecta. Las redes pueden sufrir fallas, tener diferencias en la velocidad de transmisión o problemas de latencia, lo cual puede afectar negativamente el rendimiento del sistema en su totalidad.
+4. **Administración**: administrar un sistema distribuido es más complicado porque implica coordinar múltiples sistemas en lugar de uno solo. Se requiere una gestión más compleja para asegurarse de que todas las partes del sistema funcionen correctamente, estén actualizadas y seguras.
+
+## Tipos de Sistemas Distribuidos
+
+### Distributed Computing Systems
+
+Estos sistemas están diseñados para permitir que múltiples computadoras trabajen juntas en una tarea compartida. El objetivo es mejorar el poder de cómputo y resolver tareas complejas descomponiéndolas en partes que resuelven en paralelo las distintas máquinas.
+
+Ejemplos: Clusters, Grid Computing, Cloud Computing.
+
+### Distributed Information Systems
+
+Estos sistemas se encargan de compartir y distribuir información en muchas máquinas. El énfasis está en asegurar que los datos y servicios pueden ser accedidos y administrados de forma remota.
+
+Ejemplos: Bases de Datos Distribuidas, CDNs, Email.
+
+### Distributed Pervasive Systems
+
+Estos sistemas buscan integrar a la computación en los ambientes cotidianos de forma transparente, para que los usuarios interactúen con los sistemas de cómputo de forma natural.
+
+Ejemplo: Dispositivos y sistemas "smart" que utilizan el Internet of Things, donde los recursos de hardware están embebidos en dispositivos que se comunican entre sí.
 
 ---
 
