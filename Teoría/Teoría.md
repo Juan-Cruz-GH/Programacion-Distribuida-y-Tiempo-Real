@@ -155,8 +155,93 @@ Ejemplo: Dispositivos y sistemas "smart" que utilizan el Internet of Things, don
 
 ---
 
-<h1 align="center">Clase 4 - ? de ?, 2024</h1>
+<h1 align="center">Clase 4 - 19 de septiembre, 2024</h1>
 
-##
+## Tiempo Real
+
+### Introducción
+
+Existen dos usos de la frase "tiempo real":
+
+1. Uno comercial.
+2. Otro técnico.
+
+### Aspectos comerciales
+
+Según [getstream.io](https://getstream.io/glossary/real-time-app/), una aplicación de tiempo real está diseñada para funcionar dentro de un plazo de tiempo que es efectivamente instantáneo desde el punto de vista del usuario. La respuesta ocurre tan rápidamente que cualquier interacción **parece** estar ocurriendo en tiempo real. Algunas características de aplicaciones de tiempo real son:
+
+1. Baja latencia.
+2. Interacción sincrónica.
+3. Mecanismo de "push".
+
+### Definiciones técnicas
+
+Según Butazzo, los sistemas de tiempo real son aquellos que deben reaccionar con restricciones de tiempo precisas a eventos en el ambiente. Como consecuencia, la conducta correcta de estos sistemas depende no solo de la computación si no también del instante de tiempo en el cual se produce el resultado.
+
+Según Burns, la principal característica que distingue la computación en tiempo real de otros tipos de computación es el **tiempo**. Consideremos el significado de las palabras **_tiempo_** y **_real_**:
+
+-   La palabra **_tiempo_** significa que la correctitud del sistema depende no solo del resultado lógico sino también del **momento en que el resultado es producido**.
+-   La palabra **_real_** indica que la reacción del sistema a eventos externos debe ocurrir durante su evolución. Como consecuencia de ello, la hora del sistema (tiempo interno) debe medirse con la misma escala de tiempo utilizado para medir el tiempo en el ambiente controlado (tiempo externo).
+
+### Clasificación de sistemas de tiempo real
+
+-   **Duro (hard)**:
+    -   Involucra destrucción.
+    -   Es relativamente fácil de identificar (destrucción y/o inconsistencia).
+    -   Puede ser difícil de resolver.
+-   **Blando (soft)**:
+    -   Calidad en f(t).
+    -   Hay límites de tiempo pero que la respuesta se pase de ese límite no necesariamente implica que se desmorone del sistema, sino que solo afecta a la calidad (ej: control de temperatura de un ambiente).
+    -   Existen métricas para definir la calidad o el problema generado.
+-   **Firme (firm)**:
+    -   Se descartan algunas respuestas.
+    -   La eventual ausencia/pérdida de respuesta dentro del límite de tiempo/plazo no genera destrucción pero tampoco tiene valor, se descarta. Ej: streaming,perder un frame o un bloque no se puede procesar más tarde en el tiempo, se descarta y se pierde algo de calidad, pero no se pierde el video/audio.
+    -   Existen métricas para definir el problema generado.
+
+Los sistemas de TR usualmente se enfocan en el TR Duro.
+
+### Tareas
+
+-   Las tareas son actividades con límites de tiempo de respuesta bien definidos.
+-   Un sistema puede tener muchas tareas, que se pueden combinar entre sí, lo cual complica las cosas.
+-   Las tareas "críticas" se asocian típicamente al TR Duro.
+-   Podrían tener límites de TR blando/firme y duro.
+-   Hay varias clases de tareas según su activación o aparición:
+    -   Periódicas - Sincrónicas.
+    -   Aperiódicas.
+        -   Esporádicas: t mínimo entre activaciones T.
+        -   Irregular.
+        -   Ráfagas.
+
+### Ejecución de una tarea de tiempo real
+
+![Ejecución de una tarea de tiempo real](https://i.imgur.com/isyhe8G.png)
+
+-   Activación: "cuándo".
+-   Plazo: "cuánto".
+
+1. t<sub>0</sub> depende del problema.
+2. t<sub>1</sub> depende.
+3. t<sub>1</sub> - t<sub>0</sub> podría variar.
+4. t<sub>2</sub> - t<sub>1</sub> podría variar.
+5. t<sub>3</sub> - t<sub>0</sub> depende del problema.
+6. Tiempo de respuesta = t<sub>2</sub> - t<sub>0</sub>
+7. Plazo de ejecución = t<sub>3</sub> - t<sub>0</sub>
+8. t<sub>1</sub> - t<sub>0</sub>, t<sub>2</sub> - t<sub>1</sub> y por ende t<sub>3</sub> - t<sub>2</sub> dependen no solamente del sistema de cómputo si no también de la cantidad de tareas.
+
+### Conceptos asociados al tiempo real
+
+-   Se usa scheduling de corto plazo de CPU:
+    -   Esto produce concurrencia casi natural, al identificar tareas.
+    -   Se prioriza cumplir las restricciones de tiempo por sobre el rendimiento.
+    -   Si hay menos tareas y/o las tareas son poco heterogeneas, hay menores problemas para asegurar el tiempo real.
+    -   Se utiliza preemption intensivamente (no "respetar" el slice).
+    -   Se minimizan las tareas sin restricciones de tiempo real para evitar interferencias/competencia por recursos.
+
+### Análisis, desarrollo y simulación
+
+-   El análisis tiene preferencia si es posible, lo que provee formalización y complejidad.
+-   El desarrollo involucra entrada/salida, métodos de comunicación, y usualmente muchos detalles de hardware de bajo nivel.
+-   La simulación es casi obligatoria en sistemas complejos, e involucra muchas combinaciones de eventos y tareas.
 
 ---
