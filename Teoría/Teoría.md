@@ -115,7 +115,64 @@ Los sistemas distribuidos tienen varias características principales:
 
 ---
 
-<h1 align="center">Clase 3 - 17 de septiembre, 2024</h1>
+<h1 align="center">Clase 3 - 9 de septiembre, 2024</h1>
+
+## Virtualización
+
+### Ambientes virtuales
+
+-   Son entornos que permiten ejecutar sistemas operativos o aplicaciones en un entorno aislado.
+-   Se pueden crear vía VirtualBox, VMWare, o Windows Subsystem For Linux.
+
+### Automatización de máquinas virtuales
+
+-   Herramientas como Vagrant permiten definir el entorno virtual vía un archivo de configuración (vagrantfile) que automatiza la instalación y configuración de la máquina virtual.
+-   En cierto sentido, podemos "programar" la instalación y configuración de una VM.
+
+### Contenedores
+
+-   Los contenedores permiten empaquetar aplicaciones junto con todas sus dependencias en unidades ejecutables ligeras.
+-   El ejemplo clásico es Docker.
+-   Se pueden manejar muchos contenedores distintos a la vez usando herramientas como Kubernetes.
+
+### "Bare metal"
+
+-   El bare metal se refiere al hardware físico sobre el cual un OS corre.
+-   Lo que "ve" el sistema operativo no necesariamente es bare metal (hal = Hardware Abstraction Level).
+-   Host: el sistema operativo o entorno que corre directamente sobre el hardware físico y que contiene a las máquinas virtuales (VMs).
+-   Guest: son las máquinas virtuales que corren sobre el host.
+
+### Implementación de la virtualización
+
+-   La virtualización se realiza mediante los hipervisores que son software que gestionan a las máquinas virtuales.
+-   Hay 2 tipos de hipervisores:
+    -   Tipo 1: corre directamente sobre el hardware físico, sin sistema operativo de por medio.
+    -   Tipo 2: corre sobre un sistema operativo convencional. Es el más común y el que usaremos mediante Vagrant.
+-   Cada OS guest tiene su propio "hardware", no se enteran que están virtualizados, no es bare metal.
+
+### Vagrant
+
+-   Vagrant es una herramienta de automatización para ambientes de desarrollo.
+-   Facilita la creación y gestión de máquinas virtuales mediante archivos de configuración y comandos simples.
+-   Las "boxes" son imágenes o plantillas preconstruidas que contienen configuraciones de sistemas operativos y herramientas específicas. Se pueden usar para crear máquinas virtuales de manera rápida y estandarizada.
+-   Vagrant soporta diferentes herramientas de virtualización como VirtualBox, VMware, y Hyper-V. Estos proveedores son los que gestionan el entorno en el que las máquinas virtuales son ejecutadas.
+-   El vagrantfile es el archivo de configuración principal utilizado por Vagrant. En este archivo se describen aspectos como:
+    -   Configuración del sistema operativo.
+    -   Cantidad de CPU y RAM asignada.
+    -   Sincronización de carpetas entre el host y el guest.
+    -   Configuración de red para la VM, como redes privadas o públicas.
+-   Vagrant acepta varios comandos útiles:
+    -   vagrant up: inicia la máquina virtual definida en el Vagrantfile.
+    -   vagrant halt: detiene una máquina virtual en ejecución.
+    -   vagrant destroy: elimina la máquina virtual completamente.
+    -   vagrant ssh: permite conectarse a la máquina virtual a través de SSH.
+-   Gestión de redes:
+    -   Red privada: El guest y el host pueden comunicarse, pero no es accesible desde fuera del host.
+    -   Red pública: El guest puede ser accesible por otras máquinas en la red.
+
+---
+
+<h1 align="center">Clase 4 - 17 de septiembre, 2024</h1>
 
 ## Sistemas Distribuidos vs. Sistemas Centralizados
 
@@ -155,7 +212,7 @@ Ejemplo: Dispositivos y sistemas "smart" que utilizan el Internet of Things, don
 
 ---
 
-<h1 align="center">Clase 4 - 19 de septiembre, 2024</h1>
+<h1 align="center">Clase 5 - 19 de septiembre, 2024</h1>
 
 ## Tiempo Real
 
