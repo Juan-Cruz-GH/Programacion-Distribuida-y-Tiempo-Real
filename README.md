@@ -7,6 +7,7 @@
 -   [Playlist con todas las teorías](https://www.youtube.com/playlist?list=PLDJU8kNAPOn8GJvFmLAcB7rPp2kkv5XE1)
 -   [Docker de la cátedra](https://hub.docker.com/r/gmaron/pdytr)
 -   [Prácticas resueltas](https://docs.google.com/document/u/1/)
+-   [Otros repositorios](https://github.com/search?q=pdytr&type=repositories)
 
 ## Cómo se aprueba la cursada?
 
