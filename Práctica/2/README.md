@@ -48,3 +48,8 @@ vagrant destroy
 ```
 
 ## [Más información](https://gist.github.com/wpscholar/a49594e2e2b918f4d0c4)
+
+# Cosas que dijo el profe en la corrección
+
+-   SetSocket(TCP_NoDelay) puede evitar tiempos de ejecución raros.
+-   Borrar checksum de cliente y servidor ya que no se está usando.
