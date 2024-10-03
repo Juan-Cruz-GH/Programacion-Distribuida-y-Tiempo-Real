@@ -302,3 +302,7 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 -   La simulación es casi obligatoria en sistemas complejos, e involucra muchas combinaciones de eventos y tareas.
 
 ---
+
+<h1 align="center">Clase 6 - 2 de octubre, 2024</h1>
+
+## Soporte
