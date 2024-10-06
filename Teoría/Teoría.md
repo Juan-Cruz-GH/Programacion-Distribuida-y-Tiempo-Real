@@ -306,3 +306,73 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 <h1 align="center">Clase 6 - 2 de octubre, 2024</h1>
 
 ## Soporte
+
+### Introducción
+
+-   Los Sistemas Distribuidos necesitan software de soporte.
+-   De este software, existen 3 tipos:
+    1. SOD (Sistema Operativo Distribuido): Es el que oculta o enmascara a todas las características del sistema distribuido y lo hace ver como si fuera un sistema centralizado.
+    2. SOR (Sistema Operativo de Red): Provee servicios para aplicaciones que pueden ser locales o remotas.
+    3. Middleware: Usa servicios de un SOR.
+
+### SOD vs SOR vs Middleware
+
+| Item                        | SOD (multiprocesador) | SOD (multicomputadora) | SOR      | Middleware            |
+| --------------------------- | --------------------- | ---------------------- | -------- | --------------------- |
+| Transparencia               | Muy alta              | Alta                   | Baja     | Alta                  |
+| Mismo SO en todos los nodos | Si                    | Si                     | No       | No                    |
+| Copias del SO               | 1                     | N                      | N        | N                     |
+| Modo de comunicación        | Memoria compartida    | Pasaje de mensajes     | Archivos | Específico del modelo |
+| Manejo de recursos          | Global, central       | Global, distribuido    | Por nodo | Por nodo              |
+| Escalabilidad               | No                    | Moderado               | Si       | Varía                 |
+| Apertura                    | Cerrado               | Cerrado                | Abierto  | Abierto               |
+
+### Procesos e hilos
+
+-   Típicamente, las aplicaciones de usuario del mundo real terminan haciendo uso de varios procesos, y ya sea que la aplicación sea distribuida o no, cada uno de esos procesos tiene como mínimo un hilo. De hecho es común que cada proceso tenga varios hilos y muchas veces resulta útil.
+-   El tema de hilos y procesos es muy relevante por la naturaleza concurrente de los sistemas distribuidos.
+-   Es común que un servidor tenga varios hilos, pero no muy común que un cliente tenga varios hilos.
+
+#### 3 alternativas para tener varios hilos en un servidor
+
+![Varios hilos en un servidor](https://i.imgur.com/qhSZhVb.png)
+
+1. Crear un nuevo hilo para cada requerimiento que llega (se asemeja a HTTP 1.0).
+2. Crear un nuevo hilo para cada conexión, donde cada conexión tendrá N requerimientos (se asemeja a HTTP 1.1).
+3. Tener un hilo para cada recurso o cosa que se le puede pedir al servidor.
+
+#### Cliente y Servidor con hilos
+
+![Cliente y Servidor con hilos](https://i.imgur.com/6WNKzGj.png)
+
+-   Cliente con 2 hilos: el primero genera algún tipo de resultado y el segundo, en función de ese resultado, genera requerimientos al servidor.
+-   El servidor podría tener un hilo para cada requerimiento o un hilo para cada conexión con el cliente.
+
+### Suposiciones falsas
+
+-   Muchos sistemas distribuidos se vuelven innecesariamente complejos por culpa de errores asociados a suposiciones falsas:
+
+1. La red es confiable.
+2. La red es segura.
+3. La red es homogénea.
+4. La topología no cambia.
+5. La latencia es cero.
+6. El ancho de banda es infinito.
+7. El costo de transporte es cero.
+8. Hay un solo administrador.
+
+-   De estas 8, las primeras 7 están puramente relacionadas a las redes, lo cual nos indica que hay que tener un muy buen entendimiento de redes para desarrollar sistemas distribuidos de forma correcta.
+
+---
+
+<h1 align="center">Clase 7 - ? de octubre, 2024</h1>
+
+##
+
+---
+
+<h1 align="center">Clase 8 - ? de octubre, 2024</h1>
+
+##
+
+---
