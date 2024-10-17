@@ -2,6 +2,7 @@ package pdytr.example.grpc;
 import io.grpc.*;
 
 import io.grpc.*;
+import java.util.concurrent.TimeUnit;
 
 public class Client
 {
@@ -17,6 +18,7 @@ public class Client
       // Here we create a blocking stub, but an async stub,
       // or an async stub with Future are always possible.
       GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
+      stub = stub.withDeadlineAfter(5, TimeUnit.SECONDS);
       GreetingServiceOuterClass.HelloRequest request =
         GreetingServiceOuterClass.HelloRequest.newBuilder()
           .setName("Ray")

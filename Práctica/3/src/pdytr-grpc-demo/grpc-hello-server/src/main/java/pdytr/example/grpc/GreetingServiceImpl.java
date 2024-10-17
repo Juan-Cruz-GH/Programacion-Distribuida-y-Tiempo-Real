@@ -2,10 +2,18 @@ package pdytr.example.grpc;
 
 import io.grpc.stub.StreamObserver;
 
+import static java.lang.Thread.sleep;
+
 public class GreetingServiceImpl extends GreetingServiceGrpc.GreetingServiceImplBase {
   @Override
   public void greeting(GreetingServiceOuterClass.HelloRequest request,
         StreamObserver<GreetingServiceOuterClass.HelloResponse> responseObserver) {
+    try {
+      sleep(10000);
+    }
+    catch (InterruptedException i) {
+      System.out.println("abc");
+    }
     // HelloRequest has toString auto-generated.
     System.out.println(request);
 
