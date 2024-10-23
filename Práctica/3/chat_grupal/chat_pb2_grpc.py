@@ -25,7 +25,7 @@ if _version_not_supported:
     )
 
 
-class ChatServiceStub(object):
+class ChatServerStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -35,86 +35,107 @@ class ChatServiceStub(object):
             channel: A grpc.Channel.
         """
         self.Conectar = channel.unary_unary(
-                '/ChatService/Conectar',
-                request_serializer=chat__pb2.Cliente.SerializeToString,
-                response_deserializer=chat__pb2.Respuesta.FromString,
+                '/grpc.ChatServer/Conectar',
+                request_serializer=chat__pb2.NombreCliente.SerializeToString,
+                response_deserializer=chat__pb2.Confirmacion.FromString,
                 _registered_method=True)
         self.Desconectar = channel.unary_unary(
-                '/ChatService/Desconectar',
-                request_serializer=chat__pb2.Cliente.SerializeToString,
-                response_deserializer=chat__pb2.Respuesta.FromString,
+                '/grpc.ChatServer/Desconectar',
+                request_serializer=chat__pb2.NombreCliente.SerializeToString,
+                response_deserializer=chat__pb2.Confirmacion.FromString,
                 _registered_method=True)
-        self.EnviarMensaje = channel.unary_stream(
-                '/ChatService/EnviarMensaje',
-                request_serializer=chat__pb2.EnviarRequest.SerializeToString,
-                response_deserializer=chat__pb2.Mensaje.FromString,
+        self.EnviarMensaje = channel.unary_unary(
+                '/grpc.ChatServer/EnviarMensaje',
+                request_serializer=chat__pb2.Mensaje.SerializeToString,
+                response_deserializer=chat__pb2.Confirmacion.FromString,
                 _registered_method=True)
-        self.ObtenerHistorial = channel.unary_unary(
-                '/ChatService/ObtenerHistorial',
-                request_serializer=chat__pb2.HistorialRequest.SerializeToString,
+        self.SolicitarHistorial = channel.unary_unary(
+                '/grpc.ChatServer/SolicitarHistorial',
+                request_serializer=chat__pb2.Empty.SerializeToString,
                 response_deserializer=chat__pb2.HistorialResponse.FromString,
                 _registered_method=True)
+        self.ChatStream = channel.unary_stream(
+                '/grpc.ChatServer/ChatStream',
+                request_serializer=chat__pb2.Empty.SerializeToString,
+                response_deserializer=chat__pb2.Mensaje.FromString,
+                _registered_method=True)
 
 
-class ChatServiceServicer(object):
+class ChatServerServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def Conectar(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Conectar cliente al chat
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def Desconectar(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Desconectar cliente del chat
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def EnviarMensaje(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Enviar un mensaje al chat
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ObtenerHistorial(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+    def SolicitarHistorial(self, request, context):
+        """Solicitar el historial de mensajes
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ChatStream(self, request, context):
+        """Stream para recibir mensajes en tiempo real
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_ChatServiceServicer_to_server(servicer, server):
+def add_ChatServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Conectar': grpc.unary_unary_rpc_method_handler(
                     servicer.Conectar,
-                    request_deserializer=chat__pb2.Cliente.FromString,
-                    response_serializer=chat__pb2.Respuesta.SerializeToString,
+                    request_deserializer=chat__pb2.NombreCliente.FromString,
+                    response_serializer=chat__pb2.Confirmacion.SerializeToString,
             ),
             'Desconectar': grpc.unary_unary_rpc_method_handler(
                     servicer.Desconectar,
-                    request_deserializer=chat__pb2.Cliente.FromString,
-                    response_serializer=chat__pb2.Respuesta.SerializeToString,
+                    request_deserializer=chat__pb2.NombreCliente.FromString,
+                    response_serializer=chat__pb2.Confirmacion.SerializeToString,
             ),
-            'EnviarMensaje': grpc.unary_stream_rpc_method_handler(
+            'EnviarMensaje': grpc.unary_unary_rpc_method_handler(
                     servicer.EnviarMensaje,
-                    request_deserializer=chat__pb2.EnviarRequest.FromString,
-                    response_serializer=chat__pb2.Mensaje.SerializeToString,
+                    request_deserializer=chat__pb2.Mensaje.FromString,
+                    response_serializer=chat__pb2.Confirmacion.SerializeToString,
             ),
-            'ObtenerHistorial': grpc.unary_unary_rpc_method_handler(
-                    servicer.ObtenerHistorial,
-                    request_deserializer=chat__pb2.HistorialRequest.FromString,
+            'SolicitarHistorial': grpc.unary_unary_rpc_method_handler(
+                    servicer.SolicitarHistorial,
+                    request_deserializer=chat__pb2.Empty.FromString,
                     response_serializer=chat__pb2.HistorialResponse.SerializeToString,
+            ),
+            'ChatStream': grpc.unary_stream_rpc_method_handler(
+                    servicer.ChatStream,
+                    request_deserializer=chat__pb2.Empty.FromString,
+                    response_serializer=chat__pb2.Mensaje.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'ChatService', rpc_method_handlers)
+            'grpc.ChatServer', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('ChatService', rpc_method_handlers)
+    server.add_registered_method_handlers('grpc.ChatServer', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class ChatService(object):
+class ChatServer(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -131,9 +152,9 @@ class ChatService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/ChatService/Conectar',
-            chat__pb2.Cliente.SerializeToString,
-            chat__pb2.Respuesta.FromString,
+            '/grpc.ChatServer/Conectar',
+            chat__pb2.NombreCliente.SerializeToString,
+            chat__pb2.Confirmacion.FromString,
             options,
             channel_credentials,
             insecure,
@@ -158,9 +179,9 @@ class ChatService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/ChatService/Desconectar',
-            chat__pb2.Cliente.SerializeToString,
-            chat__pb2.Respuesta.FromString,
+            '/grpc.ChatServer/Desconectar',
+            chat__pb2.NombreCliente.SerializeToString,
+            chat__pb2.Confirmacion.FromString,
             options,
             channel_credentials,
             insecure,
@@ -182,12 +203,12 @@ class ChatService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(
+        return grpc.experimental.unary_unary(
             request,
             target,
-            '/ChatService/EnviarMensaje',
-            chat__pb2.EnviarRequest.SerializeToString,
-            chat__pb2.Mensaje.FromString,
+            '/grpc.ChatServer/EnviarMensaje',
+            chat__pb2.Mensaje.SerializeToString,
+            chat__pb2.Confirmacion.FromString,
             options,
             channel_credentials,
             insecure,
@@ -199,7 +220,7 @@ class ChatService(object):
             _registered_method=True)
 
     @staticmethod
-    def ObtenerHistorial(request,
+    def SolicitarHistorial(request,
             target,
             options=(),
             channel_credentials=None,
@@ -212,9 +233,36 @@ class ChatService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/ChatService/ObtenerHistorial',
-            chat__pb2.HistorialRequest.SerializeToString,
+            '/grpc.ChatServer/SolicitarHistorial',
+            chat__pb2.Empty.SerializeToString,
             chat__pb2.HistorialResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ChatStream(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/grpc.ChatServer/ChatStream',
+            chat__pb2.Empty.SerializeToString,
+            chat__pb2.Mensaje.FromString,
             options,
             channel_credentials,
             insecure,

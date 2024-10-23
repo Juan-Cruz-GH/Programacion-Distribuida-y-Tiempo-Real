@@ -1,63 +1,71 @@
-import grpc
 from concurrent import futures
+import grpc
 import time
-import chat_pb2
-import chat_pb2_grpc
-import datetime
+import chat_pb2 as chat
+import chat_pb2_grpc as rpc
+from datetime import datetime
 
-
-class ChatService(chat_pb2_grpc.ChatServiceServicer):
+class ChatServer(rpc.ChatServerServicer):
     def __init__(self):
-        self.clients = []  # Lista de clientes conectados
-        self.messages = []  # Para almacenar mensajes
-
-    def EnviarMensaje(self, request, context):
-        mensaje = chat_pb2.Mensaje(
-            nombre=request.nombre,
-            contenido=request.contenido,
-            timestamp=str(datetime.datetime.now()),
-        )
-        self.messages.append(mensaje)
-        # Enviar el mensaje a todos los clientes conectados
-        for nombre, cliente_context in self.clients:
-            cliente_context.send_mensaje(mensaje)
+        self.chats = []  # Lista de mensajes con su historial
+        self.clientes_conectados = []  # Lista de clientes conectados
 
     def Conectar(self, request, context):
-        self.clients.append((request.nombre, context))
-        return chat_pb2.Respuesta(mensaje=f"{request.nombre} se ha unido al chat.")
+        nombre = request.nombre
+        if nombre not in self.clientes_conectados:
+            self.clientes_conectados.append(nombre)
+            mensaje = f"Bienvenido {nombre} al chat grupal!"
+            print(mensaje)
+            return chat.Confirmacion(mensaje=mensaje)
+        return chat.Confirmacion(mensaje=f"{nombre} ya está conectado.")
 
     def Desconectar(self, request, context):
-        self.clients = [
-            (nombre, cliente_context)
-            for nombre, cliente_context in self.clients
-            if nombre != request.nombre
-        ]
-        return chat_pb2.Respuesta(mensaje=f"{request.nombre} se ha desconectado.")
+        nombre = request.nombre
+        if nombre in self.clientes_conectados:
+            self.clientes_conectados.remove(nombre)
+            mensaje = f"{nombre} ha dejado el chat."
+            print(mensaje)
+            return chat.Confirmacion(mensaje=mensaje)
+        return chat.Confirmacion(mensaje=f"{nombre} no está conectado.")
 
-    def ObtenerHistorial(self, request, context):
-        return chat_pb2.HistorialResponse(
-            mensajes=[
-                chat_pb2.Mensaje(
-                    nombre=mensaje.nombre,
-                    contenido=mensaje.contenido,
-                    timestamp=mensaje.timestamp,
-                )
-                for mensaje in self.messages
-            ]
-        )
+    def EnviarMensaje(self, request, context):
+        nombre = request.nombre
+        contenido = request.contenido
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        nuevo_mensaje = chat.Mensaje(nombre=nombre, contenido=contenido, timestamp=timestamp)
+        print(f"[{timestamp}] {nombre}: {contenido}")
+        
+        # Agregar el mensaje al historial
+        self.chats.append(nuevo_mensaje)
+        self.guardar_historial(nuevo_mensaje)
+        return chat.Confirmacion(mensaje="Mensaje enviado y distribuido a todos los clientes.")
 
+    def SolicitarHistorial(self, request, context):
+        return chat.HistorialResponse(mensajes=self.chats)
 
-def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatService(), server)
-    server.add_insecure_port("[::]:50051")
-    server.start()
-    try:
+    def ChatStream(self, request, context):
+        lastindex = 0
         while True:
-            time.sleep(86400)  # Mantiene el servidor en ejecución
-    except KeyboardInterrupt:
-        server.stop(0)
+            while len(self.chats) > lastindex:
+                mensaje = self.chats[lastindex]
+                lastindex += 1
+                yield mensaje
+
+    def guardar_historial(self, mensaje):
+        with open("historial.txt", "a") as f:
+            f.write(f"[{mensaje.timestamp}] {mensaje.nombre}: {mensaje.contenido}\n")
 
 
 if __name__ == "__main__":
-    serve()
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    rpc.add_ChatServerServicer_to_server(ChatServer(), server)
+    puerto = "11913"
+    print(f"Servidor en marcha en el puerto {puerto}")
+    server.add_insecure_port(f"[::]:{puerto}")
+    server.start()
+    try:
+        while True:
+            time.sleep(86400)
+    except KeyboardInterrupt:
+        print("Servidor detenido")
+        server.stop(0)

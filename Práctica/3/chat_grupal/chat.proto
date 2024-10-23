@@ -1,36 +1,40 @@
 syntax = "proto3";
 
-service ChatService {
-  rpc Conectar(Cliente) returns (Respuesta);
-  rpc Desconectar(Cliente) returns (Respuesta);
-  rpc EnviarMensaje(EnviarRequest) returns (stream Mensaje);
-  rpc ObtenerHistorial(HistorialRequest) returns (HistorialResponse);
-}
+package grpc;
 
-message Cliente {
-  string nombre = 1;
-}
-
-message Respuesta {
-  string confirmacion = 1;
-  string mensaje = 2;
-}
-
-message EnviarRequest {
-  string nombre = 1;
-  string contenido = 2;
-}
+message Empty {}
 
 message Mensaje {
-  string nombre = 1;
-  string contenido = 2;
-  string timestamp = 3;
+    string nombre = 1;
+    string contenido = 2;
+    string timestamp = 3;  // Marca de tiempo para los mensajes
 }
 
-message HistorialRequest {
-  string comando = 1; 
+message Confirmacion {
+    string mensaje = 1;    // Mensaje de confirmación
 }
 
 message HistorialResponse {
-  repeated Mensaje mensajes = 1;
+    repeated Mensaje mensajes = 1;   // Historial de mensajes
+}
+
+message NombreCliente {
+    string nombre = 1;    // Nombre del cliente
+}
+
+service ChatServer {
+    // Conectar cliente al chat
+    rpc Conectar (NombreCliente) returns (Confirmacion);
+
+    // Desconectar cliente del chat
+    rpc Desconectar (NombreCliente) returns (Confirmacion);
+
+    // Enviar un mensaje al chat
+    rpc EnviarMensaje (Mensaje) returns (Confirmacion);
+
+    // Solicitar el historial de mensajes
+    rpc SolicitarHistorial (Empty) returns (HistorialResponse);
+
+    // Stream para recibir mensajes en tiempo real
+    rpc ChatStream (Empty) returns (stream Mensaje);
 }
