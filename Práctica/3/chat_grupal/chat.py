@@ -1,9 +1,11 @@
-from concurrent import futures
-import grpc
 import time
+from datetime import datetime
+from concurrent import futures
+
+import grpc
 import chat_pb2 as chat
 import chat_pb2_grpc as rpc
-from datetime import datetime
+
 
 puerto = "11913"
 

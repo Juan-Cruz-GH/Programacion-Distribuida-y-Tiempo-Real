@@ -1,10 +1,9 @@
-from fpdf import FPDF
-import grpc
 import threading
 
-from matplotlib.pylab import f
+import grpc
 import chat_pb2 as chat
 import chat_pb2_grpc as rpc
+from fpdf import FPDF
 
 puerto = "11913"
 
@@ -14,7 +13,7 @@ class Client:
         self.usuario = usuario
         direccion = f"localhost:{puerto}"
         self.canal = grpc.insecure_channel(target=direccion)
-        self.conexion = rpc.ChatServerStub(channel=canal)
+        self.conexion = rpc.ChatServerStub(channel=self.canal)
 
         self.conectar()
 
