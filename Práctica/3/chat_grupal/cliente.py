@@ -39,10 +39,6 @@ class Client:
             except Exception:
                 self.desconectar()
                 break
-            finally:
-                self.desconectar()
-                self.canal.close()
-                break
 
     def conectar(self):
         """
