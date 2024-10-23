@@ -24,15 +24,15 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nchat.proto\x12\x04grpc\"\x07\n\x05\x45mpty\"?\n\x07Mensaje\x12\x0e\n\x06nombre\x18\x01 \x01(\t\x12\x11\n\tcontenido\x18\x02 \x01(\t\x12\x11\n\ttimestamp\x18\x03 \x01(\t\"\x1f\n\x0c\x43onfirmacion\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\"4\n\x11HistorialResponse\x12\x1f\n\x08mensajes\x18\x01 \x03(\x0b\x32\r.grpc.Mensaje\"\x1f\n\rNombreCliente\x12\x0e\n\x06nombre\x18\x01 \x01(\t2\x95\x02\n\nChatServer\x12\x33\n\x08\x43onectar\x12\x13.grpc.NombreCliente\x1a\x12.grpc.Confirmacion\x12\x36\n\x0b\x44\x65sconectar\x12\x13.grpc.NombreCliente\x1a\x12.grpc.Confirmacion\x12\x32\n\rEnviarMensaje\x12\r.grpc.Mensaje\x1a\x12.grpc.Confirmacion\x12:\n\x12SolicitarHistorial\x12\x0b.grpc.Empty\x1a\x17.grpc.HistorialResponse\x12*\n\nChatStream\x12\x0b.grpc.Empty\x1a\r.grpc.Mensaje0\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nchat.proto\x12\x04grpc\"\x07\n\x05Vacio\"?\n\x07Mensaje\x12\x0e\n\x06nombre\x18\x01 \x01(\t\x12\x11\n\tcontenido\x18\x02 \x01(\t\x12\x11\n\ttimestamp\x18\x03 \x01(\t\"\x1f\n\x0c\x43onfirmacion\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\"4\n\x11HistorialResponse\x12\x1f\n\x08mensajes\x18\x01 \x03(\x0b\x32\r.grpc.Mensaje\"\x1f\n\rNombreCliente\x12\x0e\n\x06nombre\x18\x01 \x01(\t2\x95\x02\n\nChatServer\x12\x33\n\x08\x43onectar\x12\x13.grpc.NombreCliente\x1a\x12.grpc.Confirmacion\x12\x36\n\x0b\x44\x65sconectar\x12\x13.grpc.NombreCliente\x1a\x12.grpc.Confirmacion\x12\x32\n\rEnviarMensaje\x12\r.grpc.Mensaje\x1a\x12.grpc.Confirmacion\x12:\n\x12SolicitarHistorial\x12\x0b.grpc.Vacio\x1a\x17.grpc.HistorialResponse\x12*\n\nChatStream\x12\x0b.grpc.Vacio\x1a\r.grpc.Mensaje0\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'chat_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_EMPTY']._serialized_start=20
-  _globals['_EMPTY']._serialized_end=27
+  _globals['_VACIO']._serialized_start=20
+  _globals['_VACIO']._serialized_end=27
   _globals['_MENSAJE']._serialized_start=29
   _globals['_MENSAJE']._serialized_end=92
   _globals['_CONFIRMACION']._serialized_start=94

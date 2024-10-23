@@ -51,12 +51,12 @@ class ChatServerStub(object):
                 _registered_method=True)
         self.SolicitarHistorial = channel.unary_unary(
                 '/grpc.ChatServer/SolicitarHistorial',
-                request_serializer=chat__pb2.Empty.SerializeToString,
+                request_serializer=chat__pb2.Vacio.SerializeToString,
                 response_deserializer=chat__pb2.HistorialResponse.FromString,
                 _registered_method=True)
         self.ChatStream = channel.unary_stream(
                 '/grpc.ChatServer/ChatStream',
-                request_serializer=chat__pb2.Empty.SerializeToString,
+                request_serializer=chat__pb2.Vacio.SerializeToString,
                 response_deserializer=chat__pb2.Mensaje.FromString,
                 _registered_method=True)
 
@@ -119,12 +119,12 @@ def add_ChatServerServicer_to_server(servicer, server):
             ),
             'SolicitarHistorial': grpc.unary_unary_rpc_method_handler(
                     servicer.SolicitarHistorial,
-                    request_deserializer=chat__pb2.Empty.FromString,
+                    request_deserializer=chat__pb2.Vacio.FromString,
                     response_serializer=chat__pb2.HistorialResponse.SerializeToString,
             ),
             'ChatStream': grpc.unary_stream_rpc_method_handler(
                     servicer.ChatStream,
-                    request_deserializer=chat__pb2.Empty.FromString,
+                    request_deserializer=chat__pb2.Vacio.FromString,
                     response_serializer=chat__pb2.Mensaje.SerializeToString,
             ),
     }
@@ -234,7 +234,7 @@ class ChatServer(object):
             request,
             target,
             '/grpc.ChatServer/SolicitarHistorial',
-            chat__pb2.Empty.SerializeToString,
+            chat__pb2.Vacio.SerializeToString,
             chat__pb2.HistorialResponse.FromString,
             options,
             channel_credentials,
@@ -261,7 +261,7 @@ class ChatServer(object):
             request,
             target,
             '/grpc.ChatServer/ChatStream',
-            chat__pb2.Empty.SerializeToString,
+            chat__pb2.Vacio.SerializeToString,
             chat__pb2.Mensaje.FromString,
             options,
             channel_credentials,
