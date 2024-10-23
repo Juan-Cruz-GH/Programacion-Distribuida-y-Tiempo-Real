@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+service ChatService {
+  rpc Conectar(Cliente) returns (Respuesta);
+  rpc Desconectar(Cliente) returns (Respuesta);
+  rpc EnviarMensaje(EnviarRequest) returns (stream Mensaje);
+  rpc ObtenerHistorial(HistorialRequest) returns (HistorialResponse);
+}
+
+message Cliente {
+  string nombre = 1;
+}
+
+message Respuesta {
+  string confirmacion = 1;
+  string mensaje = 2;
+}
+
+message EnviarRequest {
+  string nombre = 1;
+  string contenido = 2;
+}
+
+message Mensaje {
+  string nombre = 1;
+  string contenido = 2;
+  string timestamp = 3;
+}
+
+message HistorialRequest {
+  string comando = 1; 
+}
+
+message HistorialResponse {
+  repeated Mensaje mensajes = 1;
+}
