@@ -26,9 +26,9 @@ class Client:
             print(f"[{mensaje.timestamp}] {mensaje.nombre}: {mensaje.contenido}")
 
     def loop(self):
-        while True:
-            mensaje = input()
-            try:
+        try:
+            while True:
+                mensaje = input()
                 if mensaje.lower() == "/salir":
                     self.desconectar()
                     break
@@ -36,9 +36,11 @@ class Client:
                     self.solicitar_historial()
                 else:
                     self.enviar_mensaje(mensaje=mensaje)
-            except Exception:
-                self.desconectar()
-                break
+        except Exception:
+            self.desconectar()
+        except KeyboardInterrupt:
+            print("Saliendo del chat...")
+            self.desconectar()
 
     def conectar(self):
         """

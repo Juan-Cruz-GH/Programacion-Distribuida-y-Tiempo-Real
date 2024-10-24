@@ -5,6 +5,7 @@ from concurrent import futures
 import grpc
 import chat_pb2 as chat
 import chat_pb2_grpc as rpc
+import threading
 
 
 puerto = "11913"
@@ -14,24 +15,28 @@ class ChatServer(rpc.ChatServerServicer):
     def __init__(self):
         self.chats = []
         self.clientes_conectados = []
+        self.chats_lock = threading.Lock() # Lock para el historial de mensajes
+        self.clientes_lock = threading.Lock() # Lock para la lista de clientes conectados
 
     def Conectar(self, request, context):
         nombre = request.nombre
-        if nombre not in self.clientes_conectados:
-            self.clientes_conectados.append(nombre)
-            mensaje = f"Bienvenido/a {nombre} al chat grupal!"
-            print(mensaje)
-            return chat.Confirmacion(mensaje=mensaje)
-        return chat.Confirmacion(mensaje=f"{nombre} ya está conectado.")
+        with self.clientes_lock:
+            if nombre not in self.clientes_conectados:
+                self.clientes_conectados.append(nombre)
+                mensaje = f"Bienvenido/a {nombre} al chat grupal!"
+                print(mensaje)
+                return chat.Confirmacion(mensaje=mensaje)
+            return chat.Confirmacion(mensaje=f"{nombre} ya está conectado.")
 
     def Desconectar(self, request, context):
         nombre = request.nombre
-        if nombre in self.clientes_conectados:
-            self.clientes_conectados.remove(nombre)
-            mensaje = f"{nombre} ha dejado el chat."
-            print(mensaje)
-            return chat.Confirmacion(mensaje=mensaje)
-        return chat.Confirmacion(mensaje=f"{nombre} no está conectado.")
+        with self.clientes_lock:
+            if nombre in self.clientes_conectados:
+                self.clientes_conectados.remove(nombre)
+                mensaje = f"{nombre} ha dejado el chat."
+                print(mensaje)
+                return chat.Confirmacion(mensaje=mensaje)
+            return chat.Confirmacion(mensaje=f"{nombre} no está conectado.")
 
     def EnviarMensaje(self, request, context):
         nombre = request.nombre
@@ -42,15 +47,18 @@ class ChatServer(rpc.ChatServerServicer):
         )
         print(f"[{timestamp}] {nombre}: {contenido}")
 
-        # Agregar el mensaje al historial
-        self.chats.append(nuevo_mensaje)
-        self.guardar_historial(nuevo_mensaje)
+        with self.chats_lock:
+            # Agregar el mensaje al historial
+            self.chats.append(nuevo_mensaje)
+            self.guardar_historial(nuevo_mensaje)
         return chat.Confirmacion(
             mensaje="Mensaje enviado y distribuido a todos los clientes."
         )
 
     def SolicitarHistorial(self, request, context):
-        return chat.HistorialResponse(mensajes=self.chats)
+        with self.chats_lock:
+            return chat.HistorialResponse(mensajes=self.chats)
+
 
     def ChatStream(self, request, context):
         lastindex = 0
