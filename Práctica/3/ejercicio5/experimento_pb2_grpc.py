@@ -25,9 +25,8 @@ if _version_not_supported:
     )
 
 
-class MyServiceStub(object):
-    """Definición del servicio
-    """
+class ExperimentoStub(object):
+    """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
         """Constructor.
@@ -35,46 +34,43 @@ class MyServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.SimpleResponse = channel.unary_unary(
-                '/grpc.MyService/SimpleResponse',
-                request_serializer=experimento__pb2.MyRequest.SerializeToString,
-                response_deserializer=experimento__pb2.MyResponse.FromString,
+        self.Respuesta = channel.unary_unary(
+                '/grpc.Experimento/Respuesta',
+                request_serializer=experimento__pb2.Request.SerializeToString,
+                response_deserializer=experimento__pb2.Response.FromString,
                 _registered_method=True)
 
 
-class MyServiceServicer(object):
-    """Definición del servicio
-    """
+class ExperimentoServicer(object):
+    """Missing associated documentation comment in .proto file."""
 
-    def SimpleResponse(self, request, context):
-        """Método SimpleResponse que toma una solicitud con datos y devuelve una respuesta
-        """
+    def Respuesta(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_MyServiceServicer_to_server(servicer, server):
+def add_ExperimentoServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'SimpleResponse': grpc.unary_unary_rpc_method_handler(
-                    servicer.SimpleResponse,
-                    request_deserializer=experimento__pb2.MyRequest.FromString,
-                    response_serializer=experimento__pb2.MyResponse.SerializeToString,
+            'Respuesta': grpc.unary_unary_rpc_method_handler(
+                    servicer.Respuesta,
+                    request_deserializer=experimento__pb2.Request.FromString,
+                    response_serializer=experimento__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'grpc.MyService', rpc_method_handlers)
+            'grpc.Experimento', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('grpc.MyService', rpc_method_handlers)
+    server.add_registered_method_handlers('grpc.Experimento', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class MyService(object):
-    """Definición del servicio
-    """
+class Experimento(object):
+    """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def SimpleResponse(request,
+    def Respuesta(request,
             target,
             options=(),
             channel_credentials=None,
@@ -87,9 +83,9 @@ class MyService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/grpc.MyService/SimpleResponse',
-            experimento__pb2.MyRequest.SerializeToString,
-            experimento__pb2.MyResponse.FromString,
+            '/grpc.Experimento/Respuesta',
+            experimento__pb2.Request.SerializeToString,
+            experimento__pb2.Response.FromString,
             options,
             channel_credentials,
             insecure,

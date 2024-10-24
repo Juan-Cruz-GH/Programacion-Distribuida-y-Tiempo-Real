@@ -24,17 +24,17 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x65xperimento.proto\x12\x04grpc\"\x19\n\tMyRequest\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"\x1d\n\nMyResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2@\n\tMyService\x12\x33\n\x0eSimpleResponse\x12\x0f.grpc.MyRequest\x1a\x10.grpc.MyResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x65xperimento.proto\x12\x04grpc\"\x18\n\x07Request\x12\r\n\x05\x64\x61tos\x18\x01 \x01(\x0c\"\x1b\n\x08Response\x12\x0f\n\x07mensaje\x18\x01 \x01(\t29\n\x0b\x45xperimento\x12*\n\tRespuesta\x12\r.grpc.Request\x1a\x0e.grpc.Responseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'experimento_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_MYREQUEST']._serialized_start=27
-  _globals['_MYREQUEST']._serialized_end=52
-  _globals['_MYRESPONSE']._serialized_start=54
-  _globals['_MYRESPONSE']._serialized_end=83
-  _globals['_MYSERVICE']._serialized_start=85
-  _globals['_MYSERVICE']._serialized_end=149
+  _globals['_REQUEST']._serialized_start=27
+  _globals['_REQUEST']._serialized_end=51
+  _globals['_RESPONSE']._serialized_start=53
+  _globals['_RESPONSE']._serialized_end=80
+  _globals['_EXPERIMENTO']._serialized_start=82
+  _globals['_EXPERIMENTO']._serialized_end=139
 # @@protoc_insertion_point(module_scope)

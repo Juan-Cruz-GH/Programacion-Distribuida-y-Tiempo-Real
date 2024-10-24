@@ -2,19 +2,14 @@ syntax = "proto3";
 
 package grpc;
 
-// Definición del servicio
-service MyService {
-    // Método SimpleResponse que toma una solicitud con datos y devuelve una respuesta
-    rpc SimpleResponse(MyRequest) returns (MyResponse);
+service Experimento {
+    rpc Respuesta(Request) returns (Response);
 }
 
-// Definición de los mensajes
-message MyRequest {
-    // Un campo de bytes que puede contener los 10^5 bytes enviados por el cliente
-    bytes data = 1;
+message Request {
+    bytes datos = 1;
 }
 
-message MyResponse {
-    // Un solo campo string con el mensaje de respuesta
-    string message = 1;
+message Response {
+    string mensaje = 1;
 }
