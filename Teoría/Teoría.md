@@ -365,14 +365,26 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 ---
 
-<h1 align="center">Clase 7 - ? de octubre, 2024</h1>
+<h1 align="center">Clase 7 - 9 de octubre, 2024</h1>
 
-##
+## Estilos Arquitecturales
 
 ---
 
-<h1 align="center">Clase 8 - ? de octubre, 2024</h1>
+<h1 align="center">Clase 8 - 9 de octubre, 2024</h1>
 
-##
+## Estilos Arquitecturales - Capas
+
+---
+
+<h1 align="center">Clase 9 - 16 de octubre, 2024</h1>
+
+## Comunicaciones
+
+---
+
+<h1 align="center">Clase 10 - 24 de octubre, 2024</h1>
+
+## Movilidad de código
 
 ---
