@@ -369,6 +369,83 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 ## Estilos Arquitecturales
 
+### Arquitecturas de hardware
+
+-   Inicialmente se tenían arquitecturas de hardware independientes del software que se usaría sobre ese hardware.
+-   A medida que fue pasando el tiempo, sin embargo, las arquitecturas de hardware se empezaron a pensar a la par del software → continuidad de desarrollo, integridad, etc.
+
+### Arquitecturas de software
+
+-   Se define, según Tanenbaum, como los diferentes componentes de software que constituyen al sistema.
+-   Estas arquitecturas de software nos dicen cómo los componentes de software deben organizarse y cómo deben interactuar.
+-   Un **estilo arquitectural**, de forma similar, se forma en términos de los componentes, cómo estos están interconectados, qué datos se intercambian entre sí, y cómo están unificadamente configurados en el sistema.
+-   Un **componente** es una unidad modular con interfaces bien requeridas y provistas que puede ser reemplazado, siempre y cuando sus interfaces no se modifiquen.
+-   Según el profe, estilo arquitectural sería equivalente a una arquitectura de software.
+-   Hay varios estilos arquitecturales populares en los Sistemas Distribuidos, todos ellos afectarán a la forma de programar y a los aspectos de tiempo real.
+
+### Arquitecturas de software "Layered"
+
+-   Una capa provee servicios a la capa superior y requiere servicios de la capa inferior.
+-   Puede ser definida usando los conceptos de Cliente Servidor, donde cada capa es cliente de la capa inferior y servidor de la capa superior.
+-   Las comunicaciones utilizan
+-   Componentes: capas.
+-   Inferfaces: Cliente/Servidor.
+-   Organización: Cliente/Servidor.
+-   Comunicaciones: requerimientos y respuestas.
+
+### Arquitecturas de software "Object based"
+
+-   Consiste en pensar en todo el sistema distribuido como objetos que están distribuidos a lo largo del sistema.
+-   Componentes: objetos.
+-   Inferfaces: métodos.
+-   Organización: distribuir a los objetos en el sistema.
+-   Comunicaciones: métodos.
+
+### Arquitecturas de software "Resource-centered"
+
+-   Se asocia a arquitecturas RESTful:
+    -   Los recursos son identificados por un nombre único.
+    -   Todos los servicios tienen la misma interfaz.
+    -   Los mensajes tienen toda la información necesaria.
+    -   Los componentes no tienen memoria.
+-   Componentes: manejadores de recursos.
+-   Inferfaces: servicios.
+-   Organización: distribuir manejadores en el sistema.
+-   Comunicaciones: interfaces, servicios.
+-   Las operaciones son PUT GET DELETE POST.
+
+### Arquitecturas de software "Publish-Subscribe"
+
+-   Enfocado directamente en los eventos.
+-   Se deben identificar todos los eventos, es decir las cosas que afectan o hacen que algo cambie en el sistema.
+-   Para cada evento, se debe analizar:
+    -   Cómo se genera.
+    -   Qué significa.
+    -   Qué datos involucra.
+    -   Si son eventos propios, de entrada/salida, etc.
+-   Los eventos son heterogeneos.
+-   Los componentes del sistema que **generan** eventos son los publicadores.
+-   Los componentes del sistema que **manejan** eventos son los suscriptores.
+-   Se construye todo el sistema en base a solo estos dos tipos de componentes.
+-   Utiliza **comunicación unidireccional y asincrónica**.
+-   Ventajas:
+    -   Desacopla el sistema en espacio: cada componente interactúa con el middleware, no con otros componentes.
+    -   Orienta la identificación de requerimientos (ing. de software).
+-   Desventajas:
+    -   Acoplamiento en tiempo: se puede evitar utilizando persistencia de datos.
+
+![Esquema Publish-Subscribe](https://i.imgur.com/Tup9TJs.png)
+
+-   El bus es middleware que puede ser un protocolo o una biblioteca.
+-   El bus es el que intercomunica a todos los componentes.
+-   La invocación puede ser directa o implícita.
+-   Los componentes pueden estar distribuidos en distintos sitios o estar todos en un mismo sitio.
+-   Resumen:
+    -   Componentes: procesos o módulos o hilos.
+    -   Inferfaces: publicación y subscripción de eventos.
+    -   Organización: distribuir procesos y determinar si es publicador o suscriptor.
+    -   Comunicaciones: definidas por el middleware para/de publicación/subscripción.
+
 ---
 
 <h1 align="center">Clase 8 - 9 de octubre, 2024</h1>
