@@ -450,7 +450,33 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 <h1 align="center">Clase 8 - 9 de octubre, 2024</h1>
 
-## Estilos Arquitecturales - Capas
+## Estilo arquitectural en capas detallado
+
+### Teniendo 2 capas
+
+-   Es directamente equivalente a Cliente/Servidor: tenemos una capa que es solo el cliente, y una capa que es solo el servidor.
+
+### Teniendo 3 capas
+
+-   Una capa es solo cliente y especificamente dedicada a interfaz de usuario.
+-   La siguiente capa, la intermedia, es servidora de la capa de interfaz de usuario y cliente de la capa de base de datos. Se le suele llamar **lógica de negocio**.
+-   La última capa es solo servidora, y especificamente pensada en base de datos, almacenamiento persistente.
+-   La primera y la última capa son fáciles de definir y no ambiguas, debido a lo populares que son desde hace mucho tiempo.
+-   Ejemplo: motor de búsqueda en Internet:
+    ![Motor de búsqueda](https://i.imgur.com/z76uKw3.png)
+
+#### Servidor "gordo" vs "flaco"
+
+![](https://i.imgur.com/nsVKtff.png)
+
+-   En los dos primeros ejemplos (a la izquierda) se tiene un gran servidor y una interfaz de usuario mínima. Esto se denomina servidor "gordo", donde todo el procesamiento está en el servidor, lo cual implica que ese servidor debe tener una gran capacidad de procesamiento, comunicaciones, almacenamiento, etc. Este concepto tiene mucha relación con el rendimiento y la escalabilidad. Este modelo se volvio menos popular a medida que fue pasando el tiempo debido a que las computadoras de los usuarios se volvieron más y más potentes, permitiendo que la carga de procesamiento sea más balanceada.
+
+### Más de 3 capas?
+
+-   La idea en este caso sería hacer subdivisiones de la capa intermedia.
+-   Siempre que se tengan más capas se tendrá mayor modularización, lo cual puede simplificar el desarrollo y reducir el acople.
+-   A su vez, tener más capas implica tener más interfaces. Esto aumenta la cantidad de datos a transferir y resulta en una mayor necesidad de interacciones y sincronizaciones.
+-   No se suele usar, en sistemas distribuidos, más de 3 capas, debido a que se vuelve contraproducente.
 
 ---
 
@@ -465,3 +491,7 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 ## Movilidad de código
 
 ---
+
+<h1 align="center">Clase 11 - 4 de noviembre, 2024</h1>
+
+## Sincronización
