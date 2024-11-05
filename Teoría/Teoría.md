@@ -484,6 +484,45 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 ## Comunicaciones
 
+### Introducción
+
+-   Las comunicaciones entre procesos ya las conocemos del contexto de los sistemas operativos.
+-   En las redes, tenemos los protocolos.
+-   En el contexto de sistemas distribuidos, nos interesa analizar las comunicaciones en el sentido de datos entre procesos/módulos.
+    -   Se busca que el nivel de abstracción sea lo más cercano a la aplicación que se está desarrollando.
+    -   Se considera la distribución de estas comunicaciones.
+    -   Se considera el tiempo de estas comunicaciones.
+    -
+
+### Aspectos importantes
+
+-   **Confiabilidad**:
+    -   Qué tan seguros estamos de que cuando enviamos un dato, ese dato llega a destino y llega de manera correcta.
+    -   Es "lo mejor" para programar.
+    -   No hay pérdida de datos.
+    -   Mantiene el orden, los mensajes llegan en el mismo orden que fueron enviados.
+    -   Implica un **costo** en recursos (hardware) y en rendimiento (tiempo).
+-   **Sincronismo**:
+    -   Se refiere al orden de ejecución.
+    -   Algunos eventos requieren una espera "punta a punta", es decir, entre el proceso que envía y el que recibe. Es el tipo de sincronismo más costoso.
+    -   Otros eventos, los "locales", (por ejemplo Sockets), cuando un proceso envía un dato, el sincronismo es local, es decir que el mecanismo crea una copia de los datos que el cliente quiere enviar, y luego se libera el que envía, no espera.
+    -   Todo sincronismo implica un **costo** en rendimiento.
+-   **Persistencia**:
+    -   Si las comunicaciones se pueden llevar a cabo sin que los procesos estén necesariamente exactamente al mismo tiempo en ejecución.
+    -   Se puede ver como la independencia entre el proceso que envía y el proceso que recibe. Si el receptor no necesita estar ejecutandose para que el mensaje le llegue, la comunicación es persistente.
+    -   Tener comunicaciones persistentes implica un **costo** en almacenamiento y también en rendimiento, aunque este último no es tan grande.
+-   **Datos**:
+    -   A pesar que los datos al final siempre terminan siendo una secuencia de bits, resulta útil en un principio definirlos semánticamente, entender qué es lo que se envía y por qué, con qué formato, etc.
+-   **Middleware**: casi todas implican comunicaciones.
+
+### Java Message Service
+
+-   Es una API provista por Java para manejar comunicaciones asincrónicas entre dos o más sistemas.
+-   Provee comunicaciones confiables, persistentes, y desacopla los componentes.
+-   Posee dos modelos de comunicación principales:
+    -   Punto a punto: usa una cola, hay un emisor y un receptor, y el mensaje se recibe una sola vez.
+    -   Publish/Subscribe: un emisor, múltiples receptores, el mensaje se envía a todos los suscriptores.
+
 ---
 
 <h1 align="center">Clase 10 - 24 de octubre, 2024</h1>
@@ -495,3 +534,15 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 <h1 align="center">Clase 11 - 4 de noviembre, 2024</h1>
 
 ## Sincronización
+
+---
+
+<h1 align="center">Clase 12 - 4 de noviembre, 2024</h1>
+
+## Sincronización - Relojes físicos
+
+---
+
+<h1 align="center">Clase 13 - 4 de noviembre, 2024</h1>
+
+## Sincronización - Relojes lógicos
