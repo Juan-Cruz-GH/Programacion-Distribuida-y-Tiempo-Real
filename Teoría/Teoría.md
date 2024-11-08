@@ -529,6 +529,45 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 ## Movilidad de código
 
+### Introducción
+
+-   Tenemos movilidad de código vs movilidad de datos.
+    -   En la movilidad de código, lo que se transporta es código ejecutable o procesos en ejecución.
+    -   En la movilidad de datos, lo que se transporta son justamente datos planos.
+-   La movilidad de código **no es lo mismo** que la migración de código.
+
+### Para qué se migra código?
+
+1. **Para mejorar la eficiencia**: si se mantiene el código en un único lugar, ese lugar va a ser el único donde se va a computar. Por ende, si podemos migrar código de un lado a otro, esto nos da la posibilidad de repartir la carga computacional y/o disminuir la carga en las redes de comunicaciones.
+2. **Para permitir la carga dinámica de código**: como puede ser código no conocido a priori, o código por demanda. Mejora la distribución e instalación del código.
+3. **Para mejorar la velocidad de respuesta para los usuarios**.
+
+### Migración
+
+-   Históricamente, la interpretación del término migración en el contexto de los sistemas distribuidos tiene que ver directamente con un proceso en ejecución que deja de ejecutarse en un sitio y pasa a ejecutarse en otro.
+-   En los sistemas paralelos, esto fue tradicionalmente pensado para el balance de carga computacional: una vez que se identifica una sobrecarga en algunas computadoras o CPUs de un sistema paralelo, se piensa en quitar una parte de esa sobrecarga y enviarla a otra computadora o CPU donde se pueda ejecutar con menos competencia de otros procesos.
+-   El concepto de migración también está relacionado al concepto **checkpoint-restart**, donde, periódicamente, se realiza un guardado en almacenamiento persistente de todo el estado de un proceso que se está ejecutando, para luego si hay alguna falla se pueda hacer un restart de ese mismo proceso en ese estado exacto, lo cual puede hacerse incluso en otra computadora distinta.
+-   La migración involucra a:
+    -   Todo el código del proceso: binario ejecutable del proceso.
+    -   Todos los datos que está usando el proceso.
+    -   El estado de ejecución de esos datos: recursos no compartidos y propios de la ejecución (pila, registros). También recursos a los que accede/utiliza en tiempo de ejecución, como archivos o impresoras.
+    -   Otros recursos.
+
+### Modelos de movilidad de código
+
+-   **Según lo que se transfiere**:
+    -   **Débil**:
+        -   Solo se transfiere el código de un proceso. No se transfiere el proceso en ejecución, si no el ejecutable.
+        -   Dónde se ejecuta el código móvil? Puede ser en el proceso receptor, o en un proceso separado.
+    -   **Fuerte**:
+        -   Se transfiere tanto el código como el estado del proceso. Es un proceso en ejecución → migración tradicional.
+        -   Qué se hace con el proceso original? Puede eliminarse del sistema inicial/origen, o puede seguir existiendo, en cuyo caso se tendría una copia exactamente igual en el sistema destino y ambos coexistirían.
+        -   Está **casi descartada** en general debido a su complejidad y debido a la popularidad de la movilidad débil (que se debe principalmente al uso de código interpretado en vez de compilado)
+-   **Según dónde se inicia la movilidad**:
+    -   **Proactivo**: el origen del código es el que inicia la transferencia.
+    -   **Reactivo**: el destino del código es el que inicia la transferencia.
+    -   Ambos implican **sincronismo**.
+
 ---
 
 <h1 align="center">Clase 11 - 4 de noviembre, 2024</h1>
