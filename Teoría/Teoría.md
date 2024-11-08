@@ -572,16 +572,24 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 <h1 align="center">Clase 11 - 4 de noviembre, 2024</h1>
 
-## Sincronización
+## Sincronización - Relojes físicos
+
+###
+
+###
+
+###
 
 ---
 
 <h1 align="center">Clase 12 - 4 de noviembre, 2024</h1>
 
-## Sincronización - Relojes físicos
+## Sincronización - Relojes lógicos
+
+###
+
+###
+
+###
 
 ---
-
-<h1 align="center">Clase 13 - 4 de noviembre, 2024</h1>
-
-## Sincronización - Relojes lógicos
