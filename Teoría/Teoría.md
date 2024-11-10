@@ -574,11 +574,85 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 ## Sincronización - Relojes físicos
 
-###
+### Introducción
 
-###
+-   En todos los sistemas de cómputo donde se mide el tiempo, un reloj se define en términos de cuántos ciclos o transiciones han ocurrido en un material que vibra con frecuencia constante.
+-   El reloj típico históricamente en las computadoras es el de cristal de cuarzo, el cual es sumamente preciso, solo puede perder o ganar medio segundo por día por inexactitud.
+-   El reloj más preciso actualmente es el **reloj atómico**, el cual tiene un error ínfimo.
 
-###
+### Relojes en el sistema operativo
+
+-   Los sistemas operativos generalmente programan un timer que genera una interrupción periódicamente. De esta forma, el SO sabe automáticamente que pasó una determinada cantidad de tiempo.
+-   Esto se puede programar con distintos niveles de precisión. Por ejemplo, una interrupción cada 1/60 segundos, cada 0.01s, cada 0.004s, cada 1ms, etc.
+
+### Problema de los relojes
+
+-   Como hay muchos tipos de relojes posibles y cada uno de ellos puede oscilar a frecuencias ligeramente distintas, se vuelve dificil que dos o más relojes se sincronicen entre sí de forma precisa.
+-   **Clock drift**: a medida que transcurre el tiempo nos alejamos cada vez más (ya sea porque avanza menos de lo que debe avanzar, o porque avanza más de lo que debe avanzar) del reloj ideal (el atómico).
+-   El reloj "perfecto" sería el que tenga exactamente igual tiempo al reloj atómico.
+
+### Solución al problema de los relojes
+
+-   Corregir la **diferencia absoluta** entre los relojes no es una buena solución **porque desordena todos los eventos del SO y crea inconsistencias**.
+-   La solución es corregir la **frecuencia**. Es decir, atrasar un reloj adelantado y adelantar un reloj atrasado. Dicho de otra forma, hacer que el tiempo pase un poco más lento (temporalmente) si venimos adelantados, o que pase un poco más rápido (temporalmente) si venimos atrasados.
+-   Lo mencionado arriba se realiza **una y otra vez** hasta que el reloj esté lo más cercano al reloj atómico. A veces se realiza esta sincronización cada vez que pasa una cantidad constante de tiempo, a veces se hace más al principio y gradualmente menos.
+
+### Cómo sincronizar el reloj de un sistema de cómputo respecto del reloj de otro?
+
+-   Lo primero a tener en cuenta es que como nuestro reloj no es preciso, puede pasar (y es común) que el reloj de la otra computadora también sea impreciso.
+
+#### Algoritmo de Cristian:
+
+-   Define un servidor de tiempo que puede proveer tiempo a todo el cliente que se lo requiera.
+-   Asume que los tiempos que lleva enviar un request del cliente al servidor y enviar un reply del servidor al cliente son iguales, es decir, **simétricos**.
+-   El tiempo corregido es igual al tiempo del servidor de tiempo (+ (el tiempo en el cual ese servidor envió la respuesta - el tiempo en el cual el cliente realizó el request) / 2).
+-   Esto significa que el error estará acotado por la longitud del intervalo entre el tiempo del reply y el tiempo del request.
+-   El punto de falla de este algoritmo es el servidor de tiempo. Si se cae, se cae todo el sistema.
+
+#### Algoritmo de Berkeley:
+
+-   Asume de antemano que no hay ninguna máquina que tenga una referencia de tiempo precisa.
+-   Define al tiempo del sistema distribuido como el tiempo promedio entre el tiempo de todas las máquinas del sistema distribuido.
+-   Se pensó para ser **implementado, no es solo teórico**.
+-   Una de todas las máquinas del S.D es la máquina "master" y es la que lleva a cabo el cálculo del tiempo promedio. Las demás son máquinas "slave".
+-   Si hay relojes que son **outliers se eliminan antes de calcular el promedio**.
+-   Si el master falla, **cualquier slave puede ser elegido como el nuevo master**. Por ende, no posee un único punto de falla.
+-   Funcionamiento:
+    1.  Periódicamente, la máquina master le pide a todas las máquinas slave su tiempo.
+    2.  Una vez el master tiene todos los tiempos, puede calcular el tiempo promedio, incluyendo por supuesto su **propio tiempo también en el cálculo**. El objetivo es que este promedio cancele o compense las tendencias de los relojes de ser imprecisos.
+    3.  Una vez se tiene el promedio, procede a hacer la diferencia entre ese promedio y todos los relojes uno por uno (que ya los tiene porque los recibió a todos), y envía esta diferencia a cada uno de los slaves.
+    4.  Cuando cada slave recibe ese cálculo de parte del master, puede ahora corregir su propio reloj por su cuenta.
+
+#### Network Time Protocol (NTP)
+
+-   Es el algoritmo que más se usa hoy en día para sincronizar relojes en sistemas distribuidos.
+-   Sus objetivos son:
+    -   Sincronizar clientes a través de Internet.
+    -   Proveer un servicio confiable (caminos y servidores redundantes, sobrevivir pérdidas de conectividad, etc).
+    -   Permitir a los clientes sincronizarse con mucha frecuencia.
+    -   Proveer protección contra interferencia (autenticación, etc).
+-   Funcionamiento:
+    -   Define a todo el sistema de sincronización de tiempo en estratos o capas.
+    -   En la primer capa, están las máquinas que están **directamente conectadas a un tiempo exacto**.
+    -   En la segunda capa, están las máquinas que están conectadas a las máquinas de la primer capa, y así siguiendo.
+    -   Un cliente puede tener varios servidores.
+    -   Posee varios modos de comunicación y varios modos de sincronización:
+        -   Modo multicast: poca precisión pero eficiente.
+        -   Modo procedural: similar al Algoritmo de Cristian.
+        -   Modo simétrico: pensado para servidores master. Dos pares de servidores master intercambian mensajes, comparan sus relojes, y se sincronizan entre sí.
+        -   Todos estos modos utilizan UDP ya que (a pesar de parecer contradictorio, por ser protocolo no confiable) es mucho más rápido que TCP, lo cual implica que es más probable que los requests y replies lleguen más rápido, lo cual a su vez implica que la cota de error se minimiza.
+-   Estructura de los mensajes NTP:
+    -   Son muchisimos, como pasaba con la estructura de los paquetes TCP, por ejemplo.
+    -   A su vez, posee 3 marcas de tiempo:
+        -   **T<sub>1</sub>**: marca de tiempo que originó el requerimiento (tiempo del cliente).
+        -   **T<sub>2</sub>**: marca de tiempo donde el servidor recibió el requerimiento (tiempo del servidor).
+        -   **T<sub>3</sub>**: marca de tiempo donde la respuesta salió del servidor (tiempo del servidor).
+        -   **T<sub>3</sub>** - **T<sub>2</sub>** da como resultado el tiempo de cómputo en el servidor (cuánto tardó en computar la respuesta que le debe devolver al cliente).
+-   NTP posee muchos tests de validación para asegurar la confiabilidad.
+
+#### SNTP
+
+-   Es una variante simplificada de NTP, que se creó debido a lo complejo que es NTP.
 
 ---
 
