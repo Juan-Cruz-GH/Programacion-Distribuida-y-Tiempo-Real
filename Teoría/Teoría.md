@@ -726,7 +726,15 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 <h1 align="center">Clase 13 - ? de noviembre, 2024</h1>
 
-## ?
+## Estados Globales
+
+###
+
+###
+
+###
+
+###
 
 ---
 
