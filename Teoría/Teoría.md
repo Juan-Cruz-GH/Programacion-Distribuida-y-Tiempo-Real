@@ -660,10 +660,82 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 ## Sincronización - Relojes lógicos
 
-###
+### Definición
 
-###
+-   Se deja de lado la idea de un reloj asociado a una fecha, a una hora, un segundo, un minuto, etc.
+-   Por ende, no se necesita corregir ninguna imprecisión.
+-   No se conserva la noción de **proporcionalidad** del tiempo.
+-   Los relojes lógicos se enfocan en la relación de orden de sucesión de eventos, es decir, qué evento ocurrió antes y qué evento ocurrió después.
+    -   La idea es ordenar temporalmente a varios eventos.
+    -   Algunos eventos se pueden ordenar y otros no, porque son concurrentes.
+-   Se asignan secuencias de números a mensajes y a eventos.
+-   Estas secuencias de números deben ser tal que todos los procesos que intervienen en esa secuencia tienen que entender lo mismo a partir de esa secuencia en relación al orden de los eventos.
+-   No hay una única fuente de tiempo que centraliza la noción del tiempo. Cada sistema mantiene su propio reloj lógico local.
 
-###
+### Relación antes-de
+
+-   Como no hay noción de proporcionalidad del tiempo, los eventos se ordenan de acuerdo al orden en que sucedieron.
+-   Para lograr esta relación, se usa la notación de Lamport:
+    -   **a → b**: a sucedió antes que b. Por ejemplo, a = se envió el mensaje, b = se recibió el mensaje.
+    -   Se cumple la propiedad de transitividad:
+        -   **Si a → b y b → c entonces a → c**: Si a sucedió antes que b, y b sucedió antes que c, entonces a sucedió antes que c también.
+
+### Asociación de clock a cada evento
+
+-   Se asocia un clock a cada evento de forma tal que si **a → b** entonces **reloj(a) < reloj(b)** porque el tiempo nunca va hacia atrás si no siempre hacia adelante.
+-   Se tiene un contador de eventos locales.
+-   Se asocia a cada evento un contador.
+-   Ante la ocurrencia de un evento, se incrementa el valor de ese contador. El "tiempo" en que ocurrió el evento es justamente el valor de ese contador.
+-   En cada computadora se puede identificar cada evento fácilmente con su nombre y el tiempo donde ocurrió.
+-   Como cada computadora tiene su **propio contador local**, esto puede generar inconsistencias cuando comparamos los tiempos de un evento de la PC A vs un evento de la PC B.
+
+### Solución a la inconsistencia
+
+-   Se usa el Algoritmo de Lamport.
+-   Todo mensaje debe llevar consigo la estampilla de tiempo del evento de envío, o del que envía.
+-   Cuando un mensaje llega a cualquier proceso, se verifica si el reloj del receptor es menor que el reloj del que envió: si el reloj del receptor es menor al tiempo del mensaje que recibió, settea su reloj al tiempo de ese mensaje + 1.
+-   Si a y b ocurren en diferentes procesos que no intercambian mensajes, entonces **a → b** es falso y **b → a** también. Es decir, estos eventos son concurrentes. El algoritmo permite mantener la relación de antes-de entre eventos relacionados, pero no en los concurrentes. Entonces el orden es **parcial**.
+-   Cada evento tiene una estampilla de tiempo Lamport, que es el nombre que se le da al reloj de ese evento.
+-   Un problema que tiene el algoritmo es que puede suceder que dos eventos concurrentes tengan exactamente la misma estampilla de tiempo.
+    -   Para solucionarlo, se define una estampilla única global que tiene dos componentes: 1) la estampilla de tiempo Lamport 2) el ID del proceso.
+    -   Entonces cuando se comparan estampillas de tiempo, se establece que una estampilla de tiempo es menor a otra si y solo si:
+        -   (la primer componente de A es **estrictamente menor** que la primer componente de B) o ((la primer componente de A es **igual** que la primer componente de B ) y (la segunda componente de A es **estrictamente menor** que la segunda componente de B))
+-   Este algoritmo no permite conocer qué eventos están relacionados causalmente.
+
+### Vectores de relojes
+
+-   Es un algoritmo que busca mejorar la solución del Algoritmo de Lamport.
+-   Funcionamiento:
+    1. Un vector de relojes es un vector tamaño N, donde N es la cantidad de procesos del sistema distribuido.
+    2. Se inicializa en 0 para todos sus elementos.
+    3. Cada proceso incrementa su posición del vector para todos sus eventos locales. Es decir, cada vez que suceda un evento para el proceso i, la posición i se incrementará en 1.
+    4. Cuando un mensaje se envía, se envía no solo el mensaje mismo si no también el vector entero del proceso que envía.
+    5. Cuando un proceso recibe este mensaje + ese vector, compara su vector con este vector que recibió y settea, para cada posición, el valor máximo entre el valor de esa posición de su vector y el valor de esa posición en el vector que recibió.
+-   El reloj de un proceso será **igual** al reloj de otro proceso si los vectores son idénticos, posición a posición.
+-   El reloj de un proceso será **menor** al reloj de otro proceso si todos los elementos son menores, posición a posición.
+-   Si el vector de A no es menor que el vector de B ni viceversa, los eventos son **concurrentes**.
+
+### Resumen
+
+-   **Causalidad**: Si a sucede antes que b, entonces a **puede afectar** al evento b.
+-   **Concurrencia**: Si hay concurrencia, es decir a no sucede antes que b ni viceversa, entonces estos eventos nunca se afectarán el uno al otro.
+-   **Ordenación parcial**: Es posible identificar los eventos que tienen relación de causalidad, pero todos los demás quedan como eventos concurrentes.
+-   **Ordenación total**: Si tuvieramos un orden total, tendríamos que todos los eventos tendrían un orden en el tiempo y estarían perfectamente ordenados.
 
 ---
+
+<h1 align="center">Clase 13 - ? de noviembre, 2024</h1>
+
+## ?
+
+---
+
+<h1 align="center">Clase 14 - ? de noviembre, 2024</h1>
+
+## ?
+
+---
+
+<h1 align="center">Clase 15 - ? de noviembre, 2024</h1>
+
+## ?
