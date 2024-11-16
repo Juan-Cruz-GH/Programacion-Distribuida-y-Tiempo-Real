@@ -14,8 +14,7 @@ public class AgenteB extends Agent {
         + here().getID()
         + "\n\n");
 
-		Object[] args = getArguments();
-        this.destino = (Location) args[0];
+        this.destino = here();
     }
     @Override
     protected void afterMove() {

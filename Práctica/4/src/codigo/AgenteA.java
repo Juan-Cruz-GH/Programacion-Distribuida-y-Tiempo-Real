@@ -18,11 +18,9 @@ public class AgenteA extends Agent {
 		AgentContainer container = getContainerController();
 
 		try {
-			Object[] args = new Object[1];
-			args[0] = here();
 
 			// Crear AgenteB en el contenedor secundario.
-			AgentController agenteB = container.createNewAgent("AgenteB", AgenteB.class.getName(), args);
+			AgentController agenteB = container.createNewAgent("AgenteB", AgenteB.class.getName(), null);
 			agenteB.start();
 		} catch (Exception e) {
 			System.err.println("Error creando al agente B: " + e.getMessage());
