@@ -1,6 +1,4 @@
 import jade.core.*;
-import jade.wrapper.AgentController;
-import jade.wrapper.ContainerController;
 
 public class AgenteB extends Agent {
     @Override
@@ -22,5 +20,8 @@ public class AgenteB extends Agent {
         + " ha sido migrado exitosamente al contenedor: " 
         + here().getID()
         + "\n\n");
+
+        Thread.sleep(2000);
+        this.doMove();
     }
 }
