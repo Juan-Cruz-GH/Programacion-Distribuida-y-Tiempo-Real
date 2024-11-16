@@ -15,8 +15,12 @@ public class AgenteB extends Agent {
     }
     @Override
     protected void afterMove() {
-        System.out.println("\n\nAgente con nombre local: " + getLocalName());
-        System.out.println("y nombre completo: " + getName());
-        System.out.println("ha sido migrado exitosamente al contenedor: " + here().getID() + "\n\n");
+        System.out.println("\n\nAgente con nombre local: " 
+        + getLocalName() 
+        + ", nombre completo: " 
+        + getName() 
+        + " ha sido migrado exitosamente al contenedor: " 
+        + here().getID()
+        + "\n\n");
     }
 }

@@ -14,14 +14,16 @@ public class AgenteA extends Agent {
         + here().getID()
         + "\n\n");
 
-		// Obtener el runtime de JADE
+		/* 		// Obtener el runtime de JADE
 		jade.core.Runtime runtime = jade.core.Runtime.instance();
 
 		// Crear el contenedor secundario (Container-1)
 		Profile profile = new ProfileImpl();
 		profile.setParameter(Profile.CONTAINER_NAME, "Container-1");
 		profile.setParameter(Profile.MAIN_HOST, "localhost");
-		ContainerController container = runtime.createAgentContainer(profile);
+		ContainerController container = runtime.createAgentContainer(profile); */
+
+		// Obtener el contenedor donde está AgenteA inicialmente
 
 		try {
 			// Crear AgenteB en el contenedor secundario
