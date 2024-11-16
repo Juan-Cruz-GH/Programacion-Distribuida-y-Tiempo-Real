@@ -1,6 +1,9 @@
 import jade.core.*;
 
 public class AgenteB extends Agent {
+
+    private Location destino;
+
     @Override
     protected void setup() {
         System.out.println("\n\nHola, soy el agente con nombre local: " 
@@ -10,6 +13,9 @@ public class AgenteB extends Agent {
         + " y en contenedor: " 
         + here().getID()
         + "\n\n");
+
+		Object[] args = getArguments();
+        this.destino = (Location) args[0];
     }
     @Override
     protected void afterMove() {
@@ -21,7 +27,11 @@ public class AgenteB extends Agent {
         + here().getID()
         + "\n\n");
 
-        Thread.sleep(2000);
-        this.doMove();
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            System.out.println("Error de threading.");
+        }
+        this.doMove(this.destino);
     }
 }
