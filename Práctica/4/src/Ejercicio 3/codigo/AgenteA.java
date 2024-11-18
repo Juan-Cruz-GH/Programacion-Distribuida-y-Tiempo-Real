@@ -1,41 +1,48 @@
 import jade.core.*;
-import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
-import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
+import java.util.ArrayList;
 
 public class AgenteA extends Agent {
+	private ArrayList<String> containers = new ArrayList<>();
+	private Location origen;
+
 	@Override
 	protected void setup() {
-        System.out.println("\n\nHola, soy el agente con nombre local: " 
-        + getLocalName() 
-        + ", nombre completo: " 
-        + getName() 
-        + " y en contenedor: " 
-        + here().getID()
-        + "\n\n");
+		this.origen = here();
 
-		// Obtener el contenedor donde está AgenteA actualmente (Container-1).
-		AgentContainer container = getContainerController();
+		// Crear contenedores que AgenteB recorrerá
+		for (int i = 2; i < 7; i++) {
+			String nombreContainer = "Container-" + i;
+			crearContainer(nombreContainer);
+			containers.add(nombreContainer);
+		}
+
+		// Agregar el contenedor de origen al final de la lista de contenedores
+		containers.add(this.origen.getName());
 
 		try {
+			// Crear el AgenteB y pasarle la lista de los contenedores que debe recorrer,
+			// incluyendo el container de origen para que sepa cuándo terminar
+			AgentController agenteB = getContainerController().createNewAgent(
+					"AgenteB",
+					AgenteB.class.getName(),
+					new Object[] { containers }
+			);
 
-			// Crear AgenteB en el contenedor secundario.
-			AgentController agenteB = container.createNewAgent("AgenteB", AgenteB.class.getName(), null);
+			// Iniciar el AgenteB
+			System.out.println("\nCreando AgenteB para recopilar información...\n");
 			agenteB.start();
 		} catch (Exception e) {
-			System.err.println("Error creando al agente B: " + e.getMessage());
+			System.out.println("Error al crear AgenteB: " + e.getMessage());
 		}
+	}
 
-		// Migramos AgenteB al Main-Container.
-		try {
-			// Esperamos 3s para tener tiempo a que se vea que AgenteB fue creado en Container-1 y será migrado
-			// al Main-Container.
-			Thread.sleep(3000);
-			Location destino = new ContainerID("Main-Container", null);;
-			AgentController agenteB = container.getAgent("AgenteB");
-			agenteB.move(destino);
-		} catch (Exception e) {
-			System.err.println("Error migrando al agente B: " + e.getMessage());
-		}
+	private void crearContainer(String nombreContainer) {
+		jade.core.Runtime runtime = jade.core.Runtime.instance();
+		Profile profile = new ProfileImpl();
+		profile.setParameter(Profile.CONTAINER_NAME, nombreContainer);
+		profile.setParameter(Profile.MAIN_HOST, "localhost");
+		runtime.createAgentContainer(profile);
 	}
 }
