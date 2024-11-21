@@ -10,10 +10,11 @@ MAIN_CLASS=AgenteA
 
 # Targets
 compile:
-	$(JAVAC) -classpath $(CLASSPATH) -d $(OUT_DIR) $(SRC_DIR)/$(MAIN_CLASS).java
+	$(JAVAC) -classpath $(CLASSPATH) -d $(OUT_DIR) $(SRC_DIR)/*.java
 
 gui:
 	$(JAVA) -cp $(CLASSPATH) jade.Boot -gui
 
 agente:
-	$(JAVA) -cp $(CLASSPATH):$(OUT_DIR) jade.Boot -gui
+	$(JAVA) -cp $(CLASSPATH):$(OUT_DIR) jade.Boot -gui -container -host localhost -agents "AgenteA:AgenteA"
+
