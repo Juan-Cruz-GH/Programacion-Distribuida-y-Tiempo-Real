@@ -4,9 +4,9 @@
 JAVAC=javac
 JAVA=java
 CLASSPATH=lib/jade.jar
-SRC_DIR=myexamples
+SRC_DIR=codigo
 OUT_DIR=classes
-MAIN_CLASS=AgenteMovil
+MAIN_CLASS=AgenteA
 
 # Targets
 compile:
