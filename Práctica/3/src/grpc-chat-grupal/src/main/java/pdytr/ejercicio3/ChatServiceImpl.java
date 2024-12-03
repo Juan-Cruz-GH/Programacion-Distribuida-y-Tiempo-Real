@@ -39,11 +39,15 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
         return new StreamObserver<>() {
             @Override
             public void onNext(Message message) {
-                System.out.println("Received message: " + message.getContent());
+                System.out.println("[Server] " + message.getName() + ": " + message.getContent());
 
-                // Retransmit message to all connected clients
+                // Retransmitir mensaje a todos los clientes conectados
                 for (StreamObserver<Message> client : clients) {
-                    client.onNext(message);
+                    try {
+                        client.onNext(message);
+                    } catch (Exception e) {
+                        System.err.println("Error retransmitiendo mensaje: " + e.getMessage());
+                    }
                 }
             }
 
@@ -55,10 +59,10 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
 
             @Override
             public void onCompleted() {
-                System.out.println("Client disconnected.");
+                System.out.println("Cliente desconectado.");
                 clients.remove(responseObserver);
-                responseObserver.onCompleted();
             }
         };
     }
+
 }

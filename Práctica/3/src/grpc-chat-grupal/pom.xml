@@ -76,11 +76,6 @@
             </goals>
             <configuration>
               <mainClass>pdytr.ejercicio3.ChatClient</mainClass>
-              <arguments>
-                <argument>localhost</argument>
-                <argument>8080</argument>
-                <argument>Lucio</argument>
-              </arguments>
             </configuration>
           </execution>
         </executions>

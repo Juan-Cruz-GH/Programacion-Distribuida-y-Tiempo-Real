@@ -7,15 +7,14 @@ import io.grpc.stub.StreamObserver;
 import java.util.Scanner;
 
 public class ChatClient {
-    private final ChatServiceGrpc.ChatServiceBlockingStub blockingStub;
     private final ChatServiceGrpc.ChatServiceStub asyncStub;
+    private final ManagedChannel channel;
     private final String clientName;
 
     public ChatClient(String host, int port, String clientName) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
+        this.channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext(true)
                 .build();
-        this.blockingStub = ChatServiceGrpc.newBlockingStub(channel);
         this.asyncStub = ChatServiceGrpc.newStub(channel);
         this.clientName = clientName;
     }
@@ -25,8 +24,64 @@ public class ChatClient {
                 .setName(clientName)
                 .build();
 
-        ServerResponse response = blockingStub.connect(request);
-        System.out.println("Server: " + response.getMessage());
+        asyncStub.connect(request, new StreamObserver<>() {
+            @Override
+            public void onNext(ServerResponse response) {
+                System.out.println("Server: " + response.getMessage());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.err.println("Error connecting: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Connection completed.");
+            }
+        });
+    }
+
+    public void chat() {
+        StreamObserver<Message> requestObserver = asyncStub.sendMessage(new StreamObserver<>() {
+            @Override
+            public void onNext(Message message) {
+                System.out.println("[Chat] " + message.getName() + ": " + message.getContent());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.err.println("Error in chat: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Chat ended by server.");
+            }
+        });
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Type your messages below. Type 'exit' to quit.");
+
+        try {
+            while (true) {
+                String input = scanner.nextLine();
+
+                if ("exit".equalsIgnoreCase(input)) {
+                    requestObserver.onCompleted();
+                    break;
+                }
+
+                Message message = Message.newBuilder()
+                        .setName(clientName)
+                        .setContent(input)
+                        .setTimestamp(String.valueOf(System.currentTimeMillis()))
+                        .build();
+                requestObserver.onNext(message);
+            }
+        } catch (Exception e) {
+            System.err.println("Error sending message: " + e.getMessage());
+        }
     }
 
     public void disconnect() {
@@ -34,29 +89,31 @@ public class ChatClient {
                 .setName(clientName)
                 .build();
 
-        ServerResponse response = blockingStub.disconnect(request);
-        System.out.println("Server: " + response.getMessage());
+        asyncStub.disconnect(request, new StreamObserver<>() {
+            @Override
+            public void onNext(ServerResponse response) {
+                System.out.println("Server: " + response.getMessage());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.err.println("Error disconnecting: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Disconnection completed.");
+            }
+        });
     }
 
-    public void sendMessage(String messageContent) {
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        Message request = Message.newBuilder()
-                .setName(clientName)
-                .setContent(messageContent)
-                .setTimestamp(timestamp)
-                .build();
-
-        ServerResponse response = blockingStub.sendMessage(request);
-        System.out.println("Server: " + response.getMessage());
-    }
-
-    public void listenForMessages() {
-        // Implementación para escuchar mensajes del servidor (puede extenderse con streams bidireccionales)
-        System.out.println("Listening for messages from the server (currently not implemented)...");
+    public void shutdown() {
+        channel.shutdown();
+        System.out.println("Client shut down.");
     }
 
     public static void main(String[] args) {
-        if (args.length < 2) {
+        if (args.length < 3) {
             System.err.println("Usage: ChatClient <host> <port> <name>");
             System.exit(1);
         }
@@ -66,23 +123,13 @@ public class ChatClient {
         String name = args[2];
 
         ChatClient client = new ChatClient(host, port, name);
-        client.connect();
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Type your messages below. Type 'exit' to quit.");
-
-        while (true) {
-            System.out.print("> ");
-            String input = scanner.nextLine();
-
-            if ("exit".equalsIgnoreCase(input)) {
-                client.disconnect();
-                break;
-            }
-
-            client.sendMessage(input);
+        try {
+            client.connect();
+            client.chat();
+        } finally {
+            client.disconnect();
+            client.shutdown();
         }
-
-        scanner.close();
     }
 }
