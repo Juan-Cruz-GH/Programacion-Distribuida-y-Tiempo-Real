@@ -5,6 +5,7 @@
     import io.grpc.stub.StreamObserver;
 
     import java.util.Scanner;
+    import java.util.concurrent.TimeUnit;
 
     public class ChatClient {
         private final ChatServiceGrpc.ChatServiceStub asyncStub;
@@ -55,7 +56,6 @@
                 @Override
                 public void onError(Throwable t) {
                     System.err.println("Error in chat: " + t.getMessage());
-                    shutdown();
                 }
 
                 @Override
@@ -90,8 +90,6 @@
                 }
             } catch (Exception e) {
                 System.err.println("Error sending message: " + e.getMessage());
-            } finally {
-                shutdown();
             }
         }
 
@@ -119,8 +117,14 @@
         }
 
         public void shutdown() {
-            channel.shutdown();
-            System.out.println("Client shut down.");
+            try {
+                if (!channel.awaitTermination(5, TimeUnit.SECONDS)) {
+                    System.err.println("Forcing shutdown due to timeout.");
+                }
+                System.out.println("Client shut down.");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
 
         public static void main(String[] args) {
