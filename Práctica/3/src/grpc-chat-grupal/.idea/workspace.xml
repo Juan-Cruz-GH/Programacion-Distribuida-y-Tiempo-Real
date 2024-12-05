@@ -7,7 +7,6 @@
     <list default="true" id="9eba7f83-c849-40f6-bafe-20cb50284816" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pdytr/ejercicio3/ChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pdytr/ejercicio3/ChatClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pdytr/ejercicio3/ChatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pdytr/ejercicio3/ChatServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +73,7 @@
       <workItem from="1733181457083" duration="10000" />
       <workItem from="1733181470973" duration="86000" />
       <workItem from="1733181703002" duration="3151000" />
-      <workItem from="1733347767212" duration="2851000" />
+      <workItem from="1733347767212" duration="3781000" />
     </task>
     <servers />
   </component>
