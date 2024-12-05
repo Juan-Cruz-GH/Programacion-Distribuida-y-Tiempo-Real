@@ -90,11 +90,6 @@ public class ChatClient {
             System.err.println("Error enviando mensaje: " + e.getMessage());
         } finally {
             scanner.close();
-            try {
-                latch.await(5, TimeUnit.SECONDS); // Esperar que el chat termine.
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
         }
     }
 
