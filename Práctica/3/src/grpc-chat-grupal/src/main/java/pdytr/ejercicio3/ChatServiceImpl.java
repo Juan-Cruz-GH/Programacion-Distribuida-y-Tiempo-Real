@@ -22,14 +22,9 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
     public void connect(ClientInfo request, StreamObserver<ServerResponse> responseObserver) {
         String name = request.getName();
 
-        // Validación de entrada
-        if (name.trim().isEmpty()) {
-            handleClientError(responseObserver, "El nombre del cliente no puede estar vacío.", io.grpc.Status.INVALID_ARGUMENT);
-            return;
-        }
-
         if (clients.containsKey(name)) {
-            handleClientError(responseObserver, "El nombre del cliente ya existe.", io.grpc.Status.ALREADY_EXISTS);
+            // TODO mandar mensaje al cliente
+            //handleClientError(responseObserver, "El nombre del cliente ya existe.", io.grpc.Status.ALREADY_EXISTS);
             return;
         }
 
@@ -41,8 +36,7 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
 
             logger.info(name + " conectado.");
         } catch (Exception e) {
-            // Manejo de errores inesperados
-            handleServerError(responseObserver, e, "Error inesperado durante la conexión.");
+            logger.info("Error inesperado durante la conexión");
         }
     }
 
@@ -50,19 +44,14 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
     public void disconnect(ClientInfo request, StreamObserver<ServerResponse> responseObserver) {
         String name = request.getName();
 
-        // Desconexión por nombre
         if (clients.remove(name) != null) {
             responseObserver.onNext(ServerResponse.newBuilder()
                     .setMessage("Adios " + name + "!")
                     .build());
-            responseObserver.onCompleted();
-            logger.info("Cliente " + name + " desconectado.");
-        } else {
-            handleClientError(responseObserver, "El cliente ya estaba desconectado.", io.grpc.Status.NOT_FOUND);
+            logger.info("Cliente " + name + " removido exitosamente.");
         }
     }
 
-    @SuppressWarnings("unused")
     @Override
     public StreamObserver<Message> sendMessage(StreamObserver<Message> responseObserver) {
         return new StreamObserver<>() {
@@ -72,17 +61,19 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
             public void onNext(Message message) {
                 if (message.getContent().isEmpty()) {
                     // Notificar al cliente sobre un error de validación
-                    handleClientError(responseObserver, "No se puede enviar un mensaje vacío.", io.grpc.Status.INVALID_ARGUMENT);
+                    // TODO sacar esto
+                    responseObserver.onError(new IllegalArgumentException("No se puede enviar un mensaje vacio"));
                     return;
                 }
 
+                // TODO armar un metodo aparte
                 if (message.getContent().equals("/historial")) {
                     String path = message.getName() + " (historial).txt";
 
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
                         for (String msg : messageHistory) {
                             writer.write(msg);
-                            writer.newLine(); 
+                            writer.newLine();
                         }
                         System.out.println("Mensajes exportados a " + path);
                     } catch (IOException e) {
@@ -91,12 +82,10 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
                 }
 
                 try {
-                    // TODO eliminar esto si no va
-                    // Registro del cliente al recibir el primer mensaje
                     if (clientName == null) {
                         clientName = message.getName();
                         if (clients.containsKey(clientName)) {
-                            handleClientError(responseObserver, "El nombre del cliente ya existe.", io.grpc.Status.ALREADY_EXISTS);
+                            responseObserver.onError(new IllegalArgumentException("Nombre ya existente"));
                             return;
                         }
                         clients.put(clientName, responseObserver);
@@ -108,26 +97,17 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
                     messageHistory.add("[" + formattedTime + "] " + message.getName() + ": " + message.getContent());
                     retransmitMessage(message);
                 } catch (Exception e) {
-                    handleServerError(responseObserver, e, "Error inesperado procesando el mensaje.");
-
+                    logger.info("se ejecuto el catch del chat del server");
                 }
             }
 
             @Override
             public void onError(Throwable t) {
-                if (t instanceof io.grpc.StatusRuntimeException statusException &&
-                        statusException.getStatus().getCode() == io.grpc.Status.Code.UNAVAILABLE) {
-                    logger.warning("Cliente desconectado abruptamente: " + clientName);
-                } else {
-                    logger.log(Level.SEVERE, "Stream error para el cliente " + clientName, t);
-                }
                 disconnectClient(clientName);
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("Cliente desconectado.");
-                disconnectClient(clientName);
             }
         };
     }
@@ -138,31 +118,15 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
             try {
                 clientStream.onNext(message);
             } catch (Exception e) {
-                logger.log(Level.WARNING, "Error enviando mensaje al cliente: " + entry.getKey(), e);
-                disconnectClient(entry.getKey());
+                logger.log(Level.WARNING, "Error enviando mensaje al cliente: " );
             }
         }
     }
 
-
     private void disconnectClient(String clientName) {
         if (clients.remove(clientName) != null) {
             logger.info("Cliente " + clientName + " removido exitosamente.");
-        } else {
-            logger.warning("Se intentó remover al cliente " + clientName + ", pero no se lo encontró en la lista.");
         }
     }
 
-    private <T> void handleClientError(StreamObserver<T> responseObserver, String errorMessage, io.grpc.Status status) {
-        logger.log(Level.WARNING, "Error del cliente: " + errorMessage);
-        responseObserver.onError(status.withDescription(errorMessage).asRuntimeException());
-    }
-
-
-    private <T> void handleServerError(StreamObserver<T> responseObserver, Exception e, String logMessage) {
-        logger.log(Level.SEVERE, logMessage, e);
-        responseObserver.onError(io.grpc.Status.INTERNAL
-                .withDescription("Error interno del servidor.")
-                .asRuntimeException());
-    }
 }

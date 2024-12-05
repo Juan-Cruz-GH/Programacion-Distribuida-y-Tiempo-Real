@@ -42,7 +42,7 @@ public class ChatClient {
             public void onCompleted() {
                 System.out.println("Conectado al servidor exitosamente.");
                 System.out.println("Escribe tus mensajes debajo. Escribe /salir para salir, " +
-                "o /historial para obtener el .txt con el historial de mensajes.");
+                        "o /historial para obtener el .txt con el historial de mensajes.");
             }
         });
     }
@@ -59,12 +59,12 @@ public class ChatClient {
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Error enviando mensaje: " + t.getMessage());
+
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("Chat finalizado por el servidor.");
+
             }
         });
 
@@ -75,7 +75,6 @@ public class ChatClient {
                 String input = scanner.nextLine();
 
                 if ("/salir".equalsIgnoreCase(input)) {
-                    requestObserver.onCompleted();
                     break;
                 }
 
@@ -106,7 +105,7 @@ public class ChatClient {
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Error desconectandose: " + t.getMessage());
+                //System.err.println("Error desconectandose: " + t.getMessage());
             }
 
             @Override
@@ -120,7 +119,7 @@ public class ChatClient {
         try {
             channel.shutdown(); // Inicia el cierre del canal.
             if (!channel.awaitTermination(5, TimeUnit.SECONDS)) {
-                System.err.println("Forcing shutdown due to timeout.");
+                // System.err.println("Forzando shutdown del cliente...");
                 channel.shutdownNow(); // Forzar cierre si no responde.
             }
             System.out.println("Cliente apagado.");
