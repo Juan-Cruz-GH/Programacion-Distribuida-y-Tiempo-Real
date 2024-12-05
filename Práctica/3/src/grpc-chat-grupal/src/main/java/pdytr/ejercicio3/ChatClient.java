@@ -79,11 +79,6 @@ public class ChatClient {
                     break;
                 }
 
-                if (input.trim().isEmpty()) {
-                    System.out.println("No se puede enviar un mensaje vacío.");
-                    continue;
-                }
-
                 Message message = Message.newBuilder()
                         .setName(clientName)
                         .setContent(input)
