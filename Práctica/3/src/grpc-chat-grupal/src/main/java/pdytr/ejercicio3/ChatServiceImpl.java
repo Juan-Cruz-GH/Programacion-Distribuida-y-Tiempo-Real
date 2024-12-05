@@ -79,12 +79,12 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
                 if (message.getContent().equals("/historial")) {
                     String path = message.getName() + " (historial).txt";
 
-                    try ((BufferedWriter writer = new BufferedWriter(new FileWriter(path)) {
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
                         for (String msg : messageHistory) {
                             writer.write(msg);
                             writer.newLine(); 
                         }
-                        System.out.println("Mensajes exportados a" + path);
+                        System.out.println("Mensajes exportados a " + path);
                     } catch (IOException e) {
                         System.err.println("Ocurrió un error al exportar los mensajes al .txt: " + e.getMessage());
                     }
