@@ -35,12 +35,14 @@ public class ChatClient {
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Error connecting: " + t.getMessage());
+                System.err.println("Error connectando: " + t.getMessage());
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("Connection completed.");
+                System.out.println("Conectado al servidor exitosamente.");
+                System.out.println("Escribe tus mensajes debajo. Escribe /salir para salir, " +
+                "o /historial para obtener el .txt con el historial de mensajes.");
             }
         });
     }
@@ -57,29 +59,28 @@ public class ChatClient {
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Error in chat: " + t.getMessage());
+                System.err.println("Error enviando mensaje: " + t.getMessage());
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("Chat ended by server.");
+                System.out.println("Chat finalizado por el servidor.");
             }
         });
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Type your messages below. Type 'exit' to quit.");
 
         try {
             while (true) {
                 String input = scanner.nextLine();
 
-                if ("exit".equalsIgnoreCase(input)) {
+                if ("/salir".equalsIgnoreCase(input)) {
                     requestObserver.onCompleted();
                     break;
                 }
 
                 if (input.trim().isEmpty()) {
-                    System.out.println("Cannot send an empty message.");
+                    System.out.println("No se puede enviar un mensaje vacío.");
                     continue;
                 }
 
@@ -91,7 +92,7 @@ public class ChatClient {
                 requestObserver.onNext(message);
             }
         } catch (Exception e) {
-            System.err.println("Error sending message: " + e.getMessage());
+            System.err.println("Error enviando mensaje: " + e.getMessage());
         } finally {
             scanner.close();
             try {
@@ -110,17 +111,17 @@ public class ChatClient {
         asyncStub.disconnect(request, new StreamObserver<>() {
             @Override
             public void onNext(ServerResponse response) {
-                System.out.println("Server: " + response.getMessage());
+                System.out.println("Respuesta del servidor al intentar desconectarse: " + response.getMessage());
             }
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Error disconnecting: " + t.getMessage());
+                System.err.println("Error desconectandose: " + t.getMessage());
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("Disconnection completed.");
+                System.out.println("Desconectado exitosamente.");
             }
         });
     }
@@ -132,7 +133,7 @@ public class ChatClient {
                 System.err.println("Forcing shutdown due to timeout.");
                 channel.shutdownNow(); // Forzar cierre si no responde.
             }
-            System.out.println("Client shut down.");
+            System.out.println("Cliente apagado.");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -140,15 +141,17 @@ public class ChatClient {
 
     public static void main(String[] args) {
         if (args.length < 3) {
-            System.err.println("Usage: ChatClient <host> <port> <name>");
+            System.err.println("Se requieren 3 argumentos: <host> <puerto> <usuario>");
             System.exit(1);
         }
 
-        String host = args[0];
-        int port = Integer.parseInt(args[1]);
-        String name = args[2];
+        System.out.println("\n\n\n");
 
-        ChatClient client = new ChatClient(host, port, name);
+        String host = args[0];
+        int puerto = Integer.parseInt(args[1]);
+        String usuario = args[2];
+
+        ChatClient client = new ChatClient(host, puerto, usuario);
 
         try {
             client.connect();

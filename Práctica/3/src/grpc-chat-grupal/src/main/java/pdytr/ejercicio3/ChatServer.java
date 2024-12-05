@@ -11,7 +11,7 @@
             Server server = ServerBuilder.forPort(50051)
                     .addService(new ChatServiceImpl())
                     .build();
-            System.out.println("Chat Server started...");
+            System.out.println("\n\n\nChat Server iniciado en el puerto 50051.");
             server.start();
             server.awaitTermination();
         }
