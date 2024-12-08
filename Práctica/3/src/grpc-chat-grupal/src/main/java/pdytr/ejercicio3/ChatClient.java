@@ -12,7 +12,7 @@ public class ChatClient {
     private final ChatServiceGrpc.ChatServiceStub asyncStub;
     private final ManagedChannel channel;
     private final String clientName;
-    private final CountDownLatch latch = new CountDownLatch(1); // Sincronizador para manejar el cierre.
+    private final CountDownLatch latch = new CountDownLatch(1); // Para esperar a que se conecte.
 
     public ChatClient(String host, int port, String clientName) {
         this.channel = ManagedChannelBuilder.forAddress(host, port)
@@ -36,7 +36,7 @@ public class ChatClient {
             @Override
             public void onError(Throwable t) {
                 System.err.println("Error connectando: " + t.getMessage());
-
+                latch.countDown();
             }
 
             @Override
@@ -44,8 +44,14 @@ public class ChatClient {
                 System.out.println("Conectado al servidor exitosamente.");
                 System.out.println("Escribe tus mensajes debajo. Escribe /salir para salir, " +
                         "o /historial para obtener el .txt con el historial de mensajes.");
+                latch.countDown();
             }
         });
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public void chat() {
@@ -152,12 +158,6 @@ public class ChatClient {
 
         try {
             client.connect();
-            // timeout para asegurar que el cliente se conecte antes de enviar mensajes.
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-
-            }
             client.chat();
         } finally {
             client.disconnect();
