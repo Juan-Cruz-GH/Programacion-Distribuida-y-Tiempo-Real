@@ -25,6 +25,10 @@ public class TestChat {
                     }
                     clientes[cliente].chat();
                } finally {
+                    try {
+                        Thread.sleep(1500);
+                    } catch (Exception e) {
+                    }
                     clientes[cliente].disconnect();
                     clientes[cliente].shutdown();
                }
