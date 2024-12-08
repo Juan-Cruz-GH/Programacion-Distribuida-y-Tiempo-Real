@@ -1,23 +1,28 @@
+# Requerimientos
+
+-   Tener instalado maven.
+-   El puerto del servidor es el 50051.
+-   Se requiere JDK versión 21.
+
 # Comandos
+
+## Cómo compilar el proyecto inicialmente
+
+```sh
+mvn clean compile
+```
 
 ## Cómo ejecutar el servidor
 
 ```sh
-mvn package exec:java -D"exec.mainClass"="pdytr.ejercicio3.ChatServer"
+mvn exec:java -D"exec.mainClass"="pdytr.ejercicio3.ChatServer"
 ```
 
 ## Cómo ejecutar el cliente
 
-```sh
-mvn exec:java -D"exec.mainClass"="pdytr.ejercicio3.ChatClient" -D"exec.args"="localhost 50051 Lucio"
-```
-
-## Comandos extra que no sé qué son
+-   Los argumentos son: host 50051 usuario.
+-   Por ejemplo: localhost 50051 Lucio
 
 ```sh
-mvn package exec:java@run-server
-```
-
-```sh
-mvn exec:java@run-client
+mvn exec:java -D"exec.mainClass"="pdytr.ejercicio3.ChatClient" -D"exec.args"="host 50051 usuario"
 ```
