@@ -76,14 +76,10 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
                 try {
                     clientName = message.getName();
                     if (message.getContent().equals("/connect")) {
-                        if (clients.containsKey(clientName)) {
-                            responseObserver.onError(io.grpc.Status.ALREADY_EXISTS
-                                    .withDescription("El cliente ya está conectado. Elija otro nombre.")
-                                    .asException());
-                            return;
+                        if (!clients.containsKey(clientName)) {
+                            clients.put(clientName, responseObserver);
+                            logger.info(clientName + " conectado exitosamente.");
                         }
-                        clients.put(clientName, responseObserver);
-                        logger.info(clientName + " conectado exitosamente.");
                     }
                     else {
                         // Procesar y retransmitir el mensaje

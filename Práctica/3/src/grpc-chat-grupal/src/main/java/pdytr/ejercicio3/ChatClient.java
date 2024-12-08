@@ -152,6 +152,12 @@ public class ChatClient {
 
         try {
             client.connect();
+            // timeout para asegurar que el cliente se conecte antes de enviar mensajes.
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+
+            }
             client.chat();
         } finally {
             client.disconnect();
