@@ -1,33 +1,32 @@
 package pdytr.ejercicio3;
 
-import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TestChat {
-    public static void main(String[] args) {
-        // ChatServer server = new ChatServer();
+    public static void main(String[] args) throws IOException, InterruptedException {
+        ChatClient[] clientes = new ChatClient[10];
+        for (int i = 0; i < 10; i++) {
+            String clientName = "Cliente-" + i;
+            clientes[i] = new ChatClient("localhost", 50051, clientName);
+        }
+
+        ExecutorService executor = Executors.newFixedThreadPool(10);
 
         for (int i = 0; i < 10; i++) {
-            int clientId = i;
-            Runnable task = () -> {
-                String clientName = "pepe" + clientId;
-                ChatClient client = new ChatClient("localhost", 50051, clientName);
-
+            int cliente = i;
+            executor.submit(() -> {
                 try {
-                  client.connect();
-
-                  String simulatedInput = "Mensaje";
-                  ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
-                  System.setIn(inputStream);    
-                        
-                  client.chat();
+                    clientes[cliente].connect();
+                    clientes[cliente].chat();
                } finally {
-                  client.disconnect();
-                  client.shutdown();
+                    clientes[cliente].disconnect();
+                    clientes[cliente].shutdown();
                }
-            };
-
-            Thread thread = new Thread(task);
-            thread.start();
+            });
         }
+
+        executor.shutdown();
     }
 }
