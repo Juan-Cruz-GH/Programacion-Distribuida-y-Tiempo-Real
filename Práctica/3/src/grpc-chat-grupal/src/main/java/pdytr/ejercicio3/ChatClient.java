@@ -71,6 +71,14 @@ public class ChatClient {
         Scanner scanner = new Scanner(System.in);
 
         try {
+            // Envio un mensaje para conectarme al chat y poder recibir mensajes.
+            Message messageToConnect = Message.newBuilder()
+                    .setName(clientName)
+                    .setContent("/connect")
+                    .setTimestamp(String.valueOf(System.currentTimeMillis()))
+                    .build();
+            requestObserver.onNext(messageToConnect);
+
             while (true) {
                 String input = scanner.nextLine();
 

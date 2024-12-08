@@ -1,5 +1,6 @@
 package pdytr.ejercicio3;
 
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
 import java.util.List;
@@ -21,12 +22,6 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
     @Override
     public void connect(ClientInfo request, StreamObserver<ServerResponse> responseObserver) {
         String name = request.getName();
-
-        if (clients.containsKey(name)) {
-            // TODO mandar mensaje al cliente
-            //handleClientError(responseObserver, "El nombre del cliente ya existe.", io.grpc.Status.ALREADY_EXISTS);
-            return;
-        }
 
         try {
             responseObserver.onNext(ServerResponse.newBuilder()
@@ -60,42 +55,35 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
             @Override
             public void onNext(Message message) {
                 if (message.getContent().isEmpty()) {
-                    // Notificar al cliente sobre un error de validación
-                    // TODO sacar esto
-                    responseObserver.onError(new IllegalArgumentException("No se puede enviar un mensaje vacio"));
+                    responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT
+                            .withDescription("El mensaje no puede estar vacío.")
+                            .asException());
                     return;
                 }
 
-                // TODO armar un metodo aparte
                 if (message.getContent().equals("/historial")) {
-                    String path = message.getName() + " (historial).txt";
-
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-                        for (String msg : messageHistory) {
-                            writer.write(msg);
-                            writer.newLine();
-                        }
-                        System.out.println("Mensajes exportados a " + path);
-                    } catch (IOException e) {
-                        System.err.println("Ocurrió un error al exportar los mensajes al .txt: " + e.getMessage());
-                    }
+                    exportMessageHistory(message.getName());
+                    return;
                 }
 
                 try {
-                    if (clientName == null) {
-                        clientName = message.getName();
+                    clientName = message.getName();
+                    if (message.getContent().equals("/connect")) {
                         if (clients.containsKey(clientName)) {
-                            responseObserver.onError(new IllegalArgumentException("Nombre ya existente"));
+                            responseObserver.onError(io.grpc.Status.ALREADY_EXISTS
+                                    .withDescription("El cliente ya está conectado. Elija otro nombre.")
+                                    .asException());
                             return;
                         }
                         clients.put(clientName, responseObserver);
-                        logger.info(clientName + " registrado exitosamente.");
+                        logger.info(clientName + " conectado exitosamente.");
                     }
-
-                    // Procesar y retransmitir el mensaje
-                    String formattedTime = Utils.formatTime(Long.parseLong(message.getTimestamp()));
-                    messageHistory.add("[" + formattedTime + "] " + message.getName() + ": " + message.getContent());
-                    retransmitMessage(message);
+                    else {
+                        // Procesar y retransmitir el mensaje
+                        String formattedTime = Utils.formatTime(Long.parseLong(message.getTimestamp()));
+                        messageHistory.add("[" + formattedTime + "] " + message.getName() + ": " + message.getContent());
+                        retransmitMessage(message);
+                    }
                 } catch (Exception e) {
                     logger.info("se ejecuto el catch del chat del server");
                 }
@@ -126,6 +114,20 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
     private void disconnectClient(String clientName) {
         if (clients.remove(clientName) != null) {
             logger.info("Cliente " + clientName + " removido exitosamente.");
+        }
+    }
+
+    private void exportMessageHistory(String clientName) {
+        String path = clientName + " (historial).txt";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            for (String msg : messageHistory) {
+                writer.write(msg);
+                writer.newLine();
+            }
+            System.out.println("Mensajes exportados a " + path);
+        } catch (IOException e) {
+            System.err.println("Ocurrió un error al exportar los mensajes al .txt: " + e.getMessage());
         }
     }
 
