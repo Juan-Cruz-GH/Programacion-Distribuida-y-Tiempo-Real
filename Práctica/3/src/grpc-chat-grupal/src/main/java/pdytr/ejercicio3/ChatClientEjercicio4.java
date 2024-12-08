@@ -8,13 +8,13 @@ import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class ChatClient {
+public class ChatClientEjercicio4 {
     private final ChatServiceGrpc.ChatServiceStub asyncStub;
     private final ManagedChannel channel;
     private final String clientName;
     private final CountDownLatch latch = new CountDownLatch(1); // Sincronizador para manejar el cierre.
 
-    public ChatClient(String host, int port, String clientName) {
+    public ChatClientEjercicio4(String host, int port, String clientName) {
         this.channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext(true)
                 .build();
@@ -136,29 +136,6 @@ public class ChatClient {
             System.out.println("Cliente apagado.");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-        }
-    }
-
-    public static void main(String[] args) {
-        if (args.length < 3) {
-            System.err.println("Se requieren 3 argumentos: <host> <puerto> <usuario>");
-            System.exit(1);
-        }
-
-        System.out.println("\n\n\n");
-
-        String host = args[0];
-        int puerto = Integer.parseInt(args[1]);
-        String usuario = args[2];
-
-        ChatClient client = new ChatClient(host, puerto, usuario);
-
-        try {
-            client.connect();
-            client.chat();
-        } finally {
-            client.disconnect();
-            client.shutdown();
         }
     }
 }
