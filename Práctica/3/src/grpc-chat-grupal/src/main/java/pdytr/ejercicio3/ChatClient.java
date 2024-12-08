@@ -36,6 +36,7 @@ public class ChatClient {
             @Override
             public void onError(Throwable t) {
                 System.err.println("Error connectando: " + t.getMessage());
+
             }
 
             @Override
@@ -59,7 +60,6 @@ public class ChatClient {
 
             @Override
             public void onError(Throwable t) {
-
             }
 
             @Override
@@ -94,7 +94,7 @@ public class ChatClient {
                 requestObserver.onNext(message);
             }
         } catch (Exception e) {
-            System.err.println("Error enviando mensaje: " + e.getMessage());
+            System.err.println("Cerrando el cliente de forma involuntaria");
         } finally {
             scanner.close();
         }

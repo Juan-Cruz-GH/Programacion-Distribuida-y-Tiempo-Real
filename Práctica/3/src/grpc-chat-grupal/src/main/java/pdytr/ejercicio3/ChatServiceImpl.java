@@ -23,6 +23,13 @@ public class ChatServiceImpl extends ChatServiceGrpc.ChatServiceImplBase {
     public void connect(ClientInfo request, StreamObserver<ServerResponse> responseObserver) {
         String name = request.getName();
 
+        if (clients.containsKey(name)) {
+            responseObserver.onError(Status.ALREADY_EXISTS
+                    .withDescription("El cliente ya está conectado. Elija otro nombre.")
+                    .asException());
+            return;
+        }
+
         try {
             responseObserver.onNext(ServerResponse.newBuilder()
                     .setMessage("Bienvenido " + name + " al chat.")
