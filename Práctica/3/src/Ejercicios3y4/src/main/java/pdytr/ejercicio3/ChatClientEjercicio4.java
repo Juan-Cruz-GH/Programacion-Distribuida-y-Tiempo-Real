@@ -80,7 +80,7 @@ public class ChatClientEjercicio4 {
                     .build();
             requestObserver.onNext(messageToConnect);
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 3; i++) {
                 // String input = scanner.nextLine();
                 String input = "Un mensaje";
     

@@ -6,15 +6,15 @@ import java.util.concurrent.Executors;
 
 public class TestChat {
     public static void main(String[] args) throws IOException, InterruptedException {
-        ChatClientEjercicio4[] clientes = new ChatClientEjercicio4[10];
-        for (int i = 0; i < 10; i++) {
+        ChatClientEjercicio4[] clientes = new ChatClientEjercicio4[5];
+        for (int i = 0; i < 5; i++) {
             String clientName = "Cliente-" + i;
             clientes[i] = new ChatClientEjercicio4("localhost", 50051, clientName);
         }
 
-        ExecutorService executor = Executors.newFixedThreadPool(10);
+        ExecutorService executor = Executors.newFixedThreadPool(5);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             int cliente = i;
             executor.submit(() -> {
                 try {
