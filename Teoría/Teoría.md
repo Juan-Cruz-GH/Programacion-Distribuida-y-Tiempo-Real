@@ -728,6 +728,33 @@ Los sistemas de TR usualmente se enfocan en el TR Duro.
 
 ## Estados Globales
 
+### Definición
+
+El estado global de un sistema distribuido está directamente relacionado con el estado de cada uno de los procesos que se está ejecutando en el S.D + el estado de todos los mensajes que están circulando por todos los canales de comunicación del S.D, ya que estos dos tipos de estado dependen el uno del otro.
+
+### Utilidad
+
+El estado global de un S.D es útil para muchas cosas, en particular tres:
+
+1. Para conocer el estado del garbage collection del sistema.
+2. Para saber si hay deadlocks o no.
+3. Para saber cuáles procesos ya han terminado y cuáles no.
+
+### Objetivo
+
+La idea es identificar la secuencia de estados o la evolución de un sistema entre los distintos estados por los que pasa.
+
+### Evaluación formal
+
+-   Un cambio de estado depende de un evento o un mensaje que a su vez dependerá de lo que se quiera analizar (memoria, cantidad de procesos, etc).
+-   Historia de un proceso:
+    -   Es el conjunto de eventos que generan que ese proceso cambie de estado.
+    -   Cada proceso tiene su propia historia.
+    -   No es necesario esperar a que el proceso termine para obtener su historia: podemos obtener una historia parcial, desde el evento 0 hasta el evento k.
+    -   **Corte**: es la unión de las historias parciales de todos los procesos, donde cada historia tiene su propio k_i.
+
+###
+
 ###
 
 ###
